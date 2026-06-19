@@ -92,6 +92,7 @@ async def lifespan(app: FastAPI):
 
     yield
 
+
     print("Stopping Gateway...")
 
 
