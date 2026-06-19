@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>PEMS Gate Scanner</title>
+
+    <script src="https://unpkg.com/html5-qrcode"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f5f7fa;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        #connection {
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .connected {
+            color: green;
+        }
+
+        .disconnected {
+            color: red;
+        }
+
+        #reader {
+            width: 500px;
+            max-width: 100%;
+            margin: auto;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            background: white;
+        }
+
+        #status {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 12px;
+            min-height: 100px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .valid {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .invalid {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        #lastScan {
+            margin-top: 15px;
+            font-size: 18px;
+            color: #444;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>PEMS-B Gate Scanner</h1>
+
+    <div id="connection" class="disconnected">
+        🔴 Disconnected
+    </div>
+
+    <div id="reader"></div>
+
+    <div id="status" class="pending">
+        Waiting for Scan...
+    </div>
+
+    <div id="lastScan">
+        No scans yet
+    </div>
+
+    <script>
+
+        // ==================================
+        // Configuration
+        // ==================================
+
+        const PEM_ID = "PEMS-B";
+        const SCAN_COOLDOWN = 5000;
+
+        // ==================================
+        // Duplicate Scan Protection
+        // ==================================
+
+        const recentScans = new Map();
+
+        // ==================================
+        // WebSocket
+        // ==================================
+
+        const ws = new WebSocket(
+            `ws://localhost:8000/ws/${PEM_ID}`
+        );
+
+        ws.onopen = () => {
+
+            console.log("Connected to Gateway");
+
+            document.getElementById("connection")
+                .innerHTML = "🟢 Connected";
+
+            document.getElementById("connection")
+                .className = "connected";
+        };
+
+        ws.onclose = () => {
+
+            console.log("Disconnected");
+
+            document.getElementById("connection")
+                .innerHTML = "🔴 Disconnected";
+
+            document.getElementById("connection")
+                .className = "disconnected";
+        };
+
+        ws.onerror = (error) => {
+            console.error(error);
+        };
+
+        ws.onmessage = (event) => {
+
+            const result = JSON.parse(event.data);
+
+            console.log(
+                "Validation Result:",
+                result
+            );
+
+            const statusDiv =
+                document.getElementById("status");
+
+            if (result.status === "VALID") {
+
+                statusDiv.className = "valid";
+
+                statusDiv.innerHTML = `
+                    🟢 ACCESS GRANTED
+                    <br><br>
+                    User: ${result.userId}
+                `;
+
+            } else {
+
+                statusDiv.className = "invalid";
+
+                statusDiv.innerHTML = `
+                    🔴 ${result.status}
+                    <br><br>
+                    User: ${result.userId}
+                `;
+            }
+        };
+
+        // ==================================
+        // QR Scan Handler
+        // ==================================
+
+        function onScanSuccess(decodedText) {
+
+            const now = Date.now();
+
+            if (
+                recentScans.has(decodedText) &&
+                now - recentScans.get(decodedText)
+                < SCAN_COOLDOWN
+            ) {
+
+                console.log(
+                    `Duplicate ignored: ${decodedText}`
+                );
+
+                return;
+            }
+
+            recentScans.set(
+                decodedText,
+                now
+            );
+
+            console.log(
+                "Scanned:",
+                decodedText
+            );
+
+            document.getElementById("lastScan")
+                .innerHTML =
+                `Last Scan: ${decodedText}`;
+
+            document.getElementById("status")
+                .className = "pending";
+
+            document.getElementById("status")
+                .innerHTML =
+                "⏳ Validating...";
+
+            ws.send(
+                JSON.stringify({
+                    userId: decodedText
+                })
+            );
+        }
+
+        function onScanFailure(error) {
+            // Ignore scan failures
+        }
+
+        // ==================================
+        // Start Scanner
+        // ==================================
+
+        const scanner =
+            new Html5QrcodeScanner(
+                "reader",
+                {
+                    fps: 10,
+                    qrbox: 250
+                },
+                false
+            );
+
+        scanner.render(
+            onScanSuccess,
+            onScanFailure
+        );
+
+    </script>
+
+</body>
+
+</html>

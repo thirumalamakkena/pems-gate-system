@@ -1,0 +1,17 @@
+__pycache__/
+*.pyc
+
+.venv/
+venv/
+
+.env
+
+node_modules/
+
+mongodb_data/
+kafka_data/
+
+.idea/
+.vscode/
+
+*.log
