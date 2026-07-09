@@ -1,0 +1,1960 @@
+[{
+  "_id": "USR011",
+  "userId": "USR011",
+  "name": "Arjun Menon",
+  "email": "arjun.menon@pems.local",
+  "department": "IT",
+  "role": "SOFTWARE_ENGINEER",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR013",
+  "userId": "USR013",
+  "name": "Sanjay Kumar",
+  "email": "sanjay.kumar@pems.local",
+  "department": "IT",
+  "role": "SYSTEM_ENGINEER",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR025",
+  "userId": "USR025",
+  "name": "Tarun Reddy",
+  "email": "tarun.reddy@pems.local",
+  "department": "Operations",
+  "role": "OPERATIONS_MANAGER",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E",
+    "PEMS-F"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR034",
+  "userId": "USR034",
+  "name": "Vinay Kumar",
+  "email": "vinay.kumar@pems.local",
+  "department": "Operations",
+  "role": "OPERATIONS_MANAGER",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E",
+    "PEMS-F"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR056",
+  "userId": "USR056",
+  "name": "Tejas Patel",
+  "email": "tejas.patel@pems.local",
+  "department": "Maintenance",
+  "role": "MAINTENANCE_ENGINEER",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E",
+    "PEMS-F",
+    "PEMS-G",
+    "PEMS-H",
+    "PEMS-I"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR063",
+  "userId": "USR063",
+  "name": "Charan Teja",
+  "email": "charan.teja@pems.local",
+  "department": "Maintenance",
+  "role": "TECHNICIAN",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E",
+    "PEMS-F",
+    "PEMS-G",
+    "PEMS-H",
+    "PEMS-I"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR039",
+  "userId": "USR039",
+  "name": "Karthik Sen",
+  "email": "karthik.sen@pems.local",
+  "department": "Operations",
+  "role": "OPERATIONS_EXECUTIVE",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E",
+    "PEMS-F"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR049",
+  "userId": "USR049",
+  "name": "Lokesh Reddy",
+  "email": "lokesh.reddy@pems.local",
+  "department": "Security",
+  "role": "SECURITY_OFFICER",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E",
+    "PEMS-F",
+    "PEMS-G",
+    "PEMS-H",
+    "PEMS-I",
+    "PEMS-J"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR010",
+  "userId": "USR010",
+  "name": "Pooja Singh",
+  "email": "pooja.singh@pems.local",
+  "department": "IT",
+  "role": "SYSTEM_ENGINEER",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR019",
+  "userId": "USR019",
+  "name": "Manoj Pillai",
+  "email": "manoj.pillai@pems.local",
+  "department": "IT",
+  "role": "SYSTEM_ENGINEER",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR022",
+  "userId": "USR022",
+  "name": "Aditi Kulkarni",
+  "email": "aditi.kulkarni@pems.local",
+  "department": "Operations",
+  "role": "OPERATIONS_MANAGER",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E",
+    "PEMS-F"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR043",
+  "userId": "USR043",
+  "name": "Satish Rao",
+  "email": "satish.rao@pems.local",
+  "department": "Security",
+  "role": "SECURITY_OFFICER",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E",
+    "PEMS-F",
+    "PEMS-G",
+    "PEMS-H",
+    "PEMS-I",
+    "PEMS-J"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR044",
+  "userId": "USR044",
+  "name": "Imran Khan",
+  "email": "imran.khan@pems.local",
+  "department": "Security",
+  "role": "SECURITY_OFFICER",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E",
+    "PEMS-F",
+    "PEMS-G",
+    "PEMS-H",
+    "PEMS-I",
+    "PEMS-J"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR089",
+  "userId": "USR089",
+  "name": "Anusha Reddy",
+  "email": "anusha.reddy@pems.local",
+  "department": "Administration",
+  "role": "ADMIN_EXECUTIVE",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR094",
+  "userId": "USR094",
+  "name": "Uma Devi",
+  "email": "uma.devi@pems.local",
+  "department": "Administration",
+  "role": "ADMIN_EXECUTIVE",
+  "employeeType": "FULL_TIME",
+  "status": "INACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR096",
+  "userId": "USR096",
+  "name": "Srinivas Rao",
+  "email": "srinivas.rao@pems.local",
+  "department": "Management",
+  "role": "GENERAL_MANAGER",
+  "employeeType": "FULL_TIME",
+  "status": "INACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E",
+    "PEMS-F",
+    "PEMS-G",
+    "PEMS-H",
+    "PEMS-I",
+    "PEMS-J"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR033",
+  "userId": "USR033",
+  "name": "Deepika Singh",
+  "email": "deepika.singh@pems.local",
+  "department": "Operations",
+  "role": "OPERATIONS_EXECUTIVE",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E",
+    "PEMS-F"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR062",
+  "userId": "USR062",
+  "name": "Hemant Shah",
+  "email": "hemant.shah@pems.local",
+  "department": "Maintenance",
+  "role": "MAINTENANCE_ENGINEER",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E",
+    "PEMS-F",
+    "PEMS-G",
+    "PEMS-H",
+    "PEMS-I"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR090",
+  "userId": "USR090",
+  "name": "Pranav Jain",
+  "email": "pranav.jain@pems.local",
+  "department": "Administration",
+  "role": "ADMIN_MANAGER",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR005",
+  "userId": "USR005",
+  "name": "Kiran Patel",
+  "email": "kiran.patel@pems.local",
+  "department": "IT",
+  "role": "SOFTWARE_ENGINEER",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR020",
+  "userId": "USR020",
+  "name": "Keerthi Rao",
+  "email": "keerthi.rao@pems.local",
+  "department": "IT",
+  "role": "SOFTWARE_ENGINEER",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR059",
+  "userId": "USR059",
+  "name": "Uday Reddy",
+  "email": "uday.reddy@pems.local",
+  "department": "Maintenance",
+  "role": "MAINTENANCE_ENGINEER",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E",
+    "PEMS-F",
+    "PEMS-G",
+    "PEMS-H",
+    "PEMS-I"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR075",
+  "userId": "USR075",
+  "name": "Jyothi Devi",
+  "email": "jyothi.devi@pems.local",
+  "department": "HR",
+  "role": "HR_EXECUTIVE",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR082",
+  "userId": "USR082",
+  "name": "Vijay Patel",
+  "email": "vijay.patel@pems.local",
+  "department": "Finance",
+  "role": "ACCOUNTANT",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR088",
+  "userId": "USR088",
+  "name": "Sridhar Rao",
+  "email": "sridhar.rao@pems.local",
+  "department": "Administration",
+  "role": "ADMIN_EXECUTIVE",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR001",
+  "userId": "USR001",
+  "name": "Aarav Reddy",
+  "email": "aarav.reddy@pems.local",
+  "department": "IT",
+  "role": "SYSTEM_ENGINEER",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR006",
+  "userId": "USR006",
+  "name": "Sneha Iyer",
+  "email": "sneha.iyer@pems.local",
+  "department": "IT",
+  "role": "DEVOPS_ENGINEER",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR012",
+  "userId": "USR012",
+  "name": "Divya Reddy",
+  "email": "divya.reddy@pems.local",
+  "department": "IT",
+  "role": "DEVOPS_ENGINEER",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR018",
+  "userId": "USR018",
+  "name": "Ishita Das",
+  "email": "ishita.das@pems.local",
+  "department": "IT",
+  "role": "DEVOPS_ENGINEER",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR051",
+  "userId": "USR051",
+  "name": "Abhishek Jain",
+  "email": "abhishek.jain@pems.local",
+  "department": "Security",
+  "role": "SECURITY_SUPERVISOR",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E",
+    "PEMS-F",
+    "PEMS-G",
+    "PEMS-H",
+    "PEMS-I",
+    "PEMS-J"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR066",
+  "userId": "USR066",
+  "name": "Anita Sharma",
+  "email": "anita.sharma@pems.local",
+  "department": "HR",
+  "role": "HR_MANAGER",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR087",
+  "userId": "USR087",
+  "name": "Leena Das",
+  "email": "leena.das@pems.local",
+  "department": "Administration",
+  "role": "ADMIN_MANAGER",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR029",
+  "userId": "USR029",
+  "name": "Lakshmi Devi",
+  "email": "lakshmi.devi@pems.local",
+  "department": "Operations",
+  "role": "OPERATIONS_EXECUTIVE",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E",
+    "PEMS-F"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR046",
+  "userId": "USR046",
+  "name": "Ganesh Patil",
+  "email": "ganesh.patil@pems.local",
+  "department": "Security",
+  "role": "SECURITY_OFFICER",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E",
+    "PEMS-F",
+    "PEMS-G",
+    "PEMS-H",
+    "PEMS-I",
+    "PEMS-J"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR067",
+  "userId": "USR067",
+  "name": "Sowmya Rao",
+  "email": "sowmya.rao@pems.local",
+  "department": "HR",
+  "role": "HR_EXECUTIVE",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR073",
+  "userId": "USR073",
+  "name": "Sandeep Jain",
+  "email": "sandeep.jain@pems.local",
+  "department": "HR",
+  "role": "HR_EXECUTIVE",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR077",
+  "userId": "USR077",
+  "name": "Preethi Rao",
+  "email": "preethi.rao@pems.local",
+  "department": "Finance",
+  "role": "FINANCE_MANAGER",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR092",
+  "userId": "USR092",
+  "name": "Ravi Teja",
+  "email": "ravi.teja@pems.local",
+  "department": "Administration",
+  "role": "ADMIN_EXECUTIVE",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR028",
+  "userId": "USR028",
+  "name": "Ajay Patel",
+  "email": "ajay.patel@pems.local",
+  "department": "Operations",
+  "role": "OPERATIONS_MANAGER",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E",
+    "PEMS-F"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR035",
+  "userId": "USR035",
+  "name": "Nisha Verma",
+  "email": "nisha.verma@pems.local",
+  "department": "Operations",
+  "role": "OPERATIONS_EXECUTIVE",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E",
+    "PEMS-F"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR053",
+  "userId": "USR053",
+  "name": "Ramesh Pillai",
+  "email": "ramesh.pillai@pems.local",
+  "department": "Security",
+  "role": "SECURITY_OFFICER",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E",
+    "PEMS-F",
+    "PEMS-G",
+    "PEMS-H",
+    "PEMS-I",
+    "PEMS-J"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR084",
+  "userId": "USR084",
+  "name": "Kamal Verma",
+  "email": "kamal.verma@pems.local",
+  "department": "Finance",
+  "role": "ACCOUNTANT",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR086",
+  "userId": "USR086",
+  "name": "Rohit Rao",
+  "email": "rohit.rao@pems.local",
+  "department": "Administration",
+  "role": "ADMIN_EXECUTIVE",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR098",
+  "userId": "USR098",
+  "name": "Lavanya Iyer",
+  "email": "lavanya.iyer@pems.local",
+  "department": "Management",
+  "role": "GENERAL_MANAGER",
+  "employeeType": "FULL_TIME",
+  "status": "SUSPENDED",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E",
+    "PEMS-F",
+    "PEMS-G",
+    "PEMS-H",
+    "PEMS-I",
+    "PEMS-J"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR038",
+  "userId": "USR038",
+  "name": "Swathi Reddy",
+  "email": "swathi.reddy@pems.local",
+  "department": "Operations",
+  "role": "OPERATIONS_EXECUTIVE",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E",
+    "PEMS-F"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR047",
+  "userId": "USR047",
+  "name": "Chaitanya Rao",
+  "email": "chaitanya.rao@pems.local",
+  "department": "Security",
+  "role": "SECURITY_OFFICER",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E",
+    "PEMS-F",
+    "PEMS-G",
+    "PEMS-H",
+    "PEMS-I",
+    "PEMS-J"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR048",
+  "userId": "USR048",
+  "name": "Sunil Das",
+  "email": "sunil.das@pems.local",
+  "department": "Security",
+  "role": "SECURITY_SUPERVISOR",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E",
+    "PEMS-F",
+    "PEMS-G",
+    "PEMS-H",
+    "PEMS-I",
+    "PEMS-J"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR060",
+  "userId": "USR060",
+  "name": "Venu Gopal",
+  "email": "venu.gopal@pems.local",
+  "department": "Maintenance",
+  "role": "TECHNICIAN",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E",
+    "PEMS-F",
+    "PEMS-G",
+    "PEMS-H",
+    "PEMS-I"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR076",
+  "userId": "USR076",
+  "name": "Aman Gupta",
+  "email": "aman.gupta@pems.local",
+  "department": "Finance",
+  "role": "ACCOUNTANT",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR021",
+  "userId": "USR021",
+  "name": "Rahul Sinha",
+  "email": "rahul.sinha@pems.local",
+  "department": "Operations",
+  "role": "OPERATIONS_EXECUTIVE",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E",
+    "PEMS-F"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR027",
+  "userId": "USR027",
+  "name": "Sonal Jain",
+  "email": "sonal.jain@pems.local",
+  "department": "Operations",
+  "role": "OPERATIONS_EXECUTIVE",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E",
+    "PEMS-F"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR050",
+  "userId": "USR050",
+  "name": "Varun Singh",
+  "email": "varun.singh@pems.local",
+  "department": "Security",
+  "role": "SECURITY_OFFICER",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E",
+    "PEMS-F",
+    "PEMS-G",
+    "PEMS-H",
+    "PEMS-I",
+    "PEMS-J"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR054",
+  "userId": "USR054",
+  "name": "Mahesh Gupta",
+  "email": "mahesh.gupta@pems.local",
+  "department": "Security",
+  "role": "SECURITY_SUPERVISOR",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E",
+    "PEMS-F",
+    "PEMS-G",
+    "PEMS-H",
+    "PEMS-I",
+    "PEMS-J"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR057",
+  "userId": "USR057",
+  "name": "Ramu Das",
+  "email": "ramu.das@pems.local",
+  "department": "Maintenance",
+  "role": "TECHNICIAN",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E",
+    "PEMS-F",
+    "PEMS-G",
+    "PEMS-H",
+    "PEMS-I"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR061",
+  "userId": "USR061",
+  "name": "Bharath Rao",
+  "email": "bharath.rao@pems.local",
+  "department": "Maintenance",
+  "role": "TECHNICIAN",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E",
+    "PEMS-F",
+    "PEMS-G",
+    "PEMS-H",
+    "PEMS-I"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR065",
+  "userId": "USR065",
+  "name": "Raghu Nair",
+  "email": "raghu.nair@pems.local",
+  "department": "Maintenance",
+  "role": "MAINTENANCE_ENGINEER",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E",
+    "PEMS-F",
+    "PEMS-G",
+    "PEMS-H",
+    "PEMS-I"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR072",
+  "userId": "USR072",
+  "name": "Monica Roy",
+  "email": "monica.roy@pems.local",
+  "department": "HR",
+  "role": "HR_EXECUTIVE",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR078",
+  "userId": "USR078",
+  "name": "Nitin Shah",
+  "email": "nitin.shah@pems.local",
+  "department": "Finance",
+  "role": "ACCOUNTANT",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR093",
+  "userId": "USR093",
+  "name": "Harsha Nair",
+  "email": "harsha.nair@pems.local",
+  "department": "Administration",
+  "role": "ADMIN_MANAGER",
+  "employeeType": "FULL_TIME",
+  "status": "INACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR009",
+  "userId": "USR009",
+  "name": "Nikhil Verma",
+  "email": "nikhil.verma@pems.local",
+  "department": "IT",
+  "role": "DEVOPS_ENGINEER",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR014",
+  "userId": "USR014",
+  "name": "Kavya Nair",
+  "email": "kavya.nair@pems.local",
+  "department": "IT",
+  "role": "SOFTWARE_ENGINEER",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR024",
+  "userId": "USR024",
+  "name": "Shruti Roy",
+  "email": "shruti.roy@pems.local",
+  "department": "Operations",
+  "role": "OPERATIONS_EXECUTIVE",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E",
+    "PEMS-F"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR058",
+  "userId": "USR058",
+  "name": "Siva Kumar",
+  "email": "siva.kumar@pems.local",
+  "department": "Maintenance",
+  "role": "TECHNICIAN",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E",
+    "PEMS-F",
+    "PEMS-G",
+    "PEMS-H",
+    "PEMS-I"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR083",
+  "userId": "USR083",
+  "name": "Sonia Roy",
+  "email": "sonia.roy@pems.local",
+  "department": "Finance",
+  "role": "FINANCE_MANAGER",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR099",
+  "userId": "USR099",
+  "name": "Rajesh Sharma",
+  "email": "rajesh.sharma@pems.local",
+  "department": "Management",
+  "role": "DIRECTOR",
+  "employeeType": "FULL_TIME",
+  "status": "SUSPENDED",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E",
+    "PEMS-F",
+    "PEMS-G",
+    "PEMS-H",
+    "PEMS-I",
+    "PEMS-J"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR100",
+  "userId": "USR100",
+  "name": "Deepa Nair",
+  "email": "deepa.nair@pems.local",
+  "department": "Management",
+  "role": "GENERAL_MANAGER",
+  "employeeType": "FULL_TIME",
+  "status": "SUSPENDED",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E",
+    "PEMS-F",
+    "PEMS-G",
+    "PEMS-H",
+    "PEMS-I",
+    "PEMS-J"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR002",
+  "userId": "USR002",
+  "name": "Vikram Sharma",
+  "email": "vikram.sharma@pems.local",
+  "department": "IT",
+  "role": "SOFTWARE_ENGINEER",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR007",
+  "userId": "USR007",
+  "name": "Rohan Gupta",
+  "email": "rohan.gupta@pems.local",
+  "department": "IT",
+  "role": "SYSTEM_ENGINEER",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR008",
+  "userId": "USR008",
+  "name": "Meera Joshi",
+  "email": "meera.joshi@pems.local",
+  "department": "IT",
+  "role": "SOFTWARE_ENGINEER",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR026",
+  "userId": "USR026",
+  "name": "Naveen Rao",
+  "email": "naveen.rao@pems.local",
+  "department": "Operations",
+  "role": "OPERATIONS_EXECUTIVE",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E",
+    "PEMS-F"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR030",
+  "userId": "USR030",
+  "name": "Ritesh Shah",
+  "email": "ritesh.shah@pems.local",
+  "department": "Operations",
+  "role": "OPERATIONS_EXECUTIVE",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E",
+    "PEMS-F"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR031",
+  "userId": "USR031",
+  "name": "Bhavana Iyer",
+  "email": "bhavana.iyer@pems.local",
+  "department": "Operations",
+  "role": "OPERATIONS_MANAGER",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E",
+    "PEMS-F"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR040",
+  "userId": "USR040",
+  "name": "Madhuri Rao",
+  "email": "madhuri.rao@pems.local",
+  "department": "Operations",
+  "role": "OPERATIONS_MANAGER",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E",
+    "PEMS-F"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR045",
+  "userId": "USR045",
+  "name": "Arif Ali",
+  "email": "arif.ali@pems.local",
+  "department": "Security",
+  "role": "SECURITY_SUPERVISOR",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E",
+    "PEMS-F",
+    "PEMS-G",
+    "PEMS-H",
+    "PEMS-I",
+    "PEMS-J"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR052",
+  "userId": "USR052",
+  "name": "Praveen Nair",
+  "email": "praveen.nair@pems.local",
+  "department": "Security",
+  "role": "SECURITY_OFFICER",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E",
+    "PEMS-F",
+    "PEMS-G",
+    "PEMS-H",
+    "PEMS-I",
+    "PEMS-J"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR070",
+  "userId": "USR070",
+  "name": "Reshma Nair",
+  "email": "reshma.nair@pems.local",
+  "department": "HR",
+  "role": "HR_MANAGER",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR071",
+  "userId": "USR071",
+  "name": "Harika Reddy",
+  "email": "harika.reddy@pems.local",
+  "department": "HR",
+  "role": "HR_EXECUTIVE",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR085",
+  "userId": "USR085",
+  "name": "Farah Ali",
+  "email": "farah.ali@pems.local",
+  "department": "Finance",
+  "role": "ACCOUNTANT",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR097",
+  "userId": "USR097",
+  "name": "Pavan Kumar",
+  "email": "pavan.kumar@pems.local",
+  "department": "Management",
+  "role": "DIRECTOR",
+  "employeeType": "FULL_TIME",
+  "status": "INACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E",
+    "PEMS-F",
+    "PEMS-G",
+    "PEMS-H",
+    "PEMS-I",
+    "PEMS-J"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR003",
+  "userId": "USR003",
+  "name": "Priya Nair",
+  "email": "priya.nair@pems.local",
+  "department": "IT",
+  "role": "DEVOPS_ENGINEER",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR016",
+  "userId": "USR016",
+  "name": "Neha Sharma",
+  "email": "neha.sharma@pems.local",
+  "department": "IT",
+  "role": "SYSTEM_ENGINEER",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR036",
+  "userId": "USR036",
+  "name": "Suresh Nair",
+  "email": "suresh.nair@pems.local",
+  "department": "Operations",
+  "role": "OPERATIONS_EXECUTIVE",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E",
+    "PEMS-F"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR042",
+  "userId": "USR042",
+  "name": "Joseph Mathew",
+  "email": "joseph.mathew@pems.local",
+  "department": "Security",
+  "role": "SECURITY_SUPERVISOR",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E",
+    "PEMS-F",
+    "PEMS-G",
+    "PEMS-H",
+    "PEMS-I",
+    "PEMS-J"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR055",
+  "userId": "USR055",
+  "name": "Kishore Rao",
+  "email": "kishore.rao@pems.local",
+  "department": "Security",
+  "role": "SECURITY_OFFICER",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E",
+    "PEMS-F",
+    "PEMS-G",
+    "PEMS-H",
+    "PEMS-I",
+    "PEMS-J"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR068",
+  "userId": "USR068",
+  "name": "Pallavi Das",
+  "email": "pallavi.das@pems.local",
+  "department": "HR",
+  "role": "HR_EXECUTIVE",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR074",
+  "userId": "USR074",
+  "name": "Keerti Singh",
+  "email": "keerti.singh@pems.local",
+  "department": "HR",
+  "role": "HR_MANAGER",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR004",
+  "userId": "USR004",
+  "name": "Ananya Rao",
+  "email": "ananya.rao@pems.local",
+  "department": "IT",
+  "role": "SYSTEM_ENGINEER",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR023",
+  "userId": "USR023",
+  "name": "Gopal Krishna",
+  "email": "gopal.krishna@pems.local",
+  "department": "Operations",
+  "role": "OPERATIONS_EXECUTIVE",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E",
+    "PEMS-F"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR032",
+  "userId": "USR032",
+  "name": "Prakash Rao",
+  "email": "prakash.rao@pems.local",
+  "department": "Operations",
+  "role": "OPERATIONS_EXECUTIVE",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E",
+    "PEMS-F"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR037",
+  "userId": "USR037",
+  "name": "Akhil Das",
+  "email": "akhil.das@pems.local",
+  "department": "Operations",
+  "role": "OPERATIONS_MANAGER",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E",
+    "PEMS-F"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR079",
+  "userId": "USR079",
+  "name": "Rupa Nair",
+  "email": "rupa.nair@pems.local",
+  "department": "Finance",
+  "role": "ACCOUNTANT",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR081",
+  "userId": "USR081",
+  "name": "Geetha Devi",
+  "email": "geetha.devi@pems.local",
+  "department": "Finance",
+  "role": "ACCOUNTANT",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR091",
+  "userId": "USR091",
+  "name": "Mitali Sen",
+  "email": "mitali.sen@pems.local",
+  "department": "Administration",
+  "role": "ADMIN_EXECUTIVE",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR095",
+  "userId": "USR095",
+  "name": "Naveena Rao",
+  "email": "naveena.rao@pems.local",
+  "department": "Administration",
+  "role": "ADMIN_EXECUTIVE",
+  "employeeType": "FULL_TIME",
+  "status": "INACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR015",
+  "userId": "USR015",
+  "name": "Harish Rao",
+  "email": "harish.rao@pems.local",
+  "department": "IT",
+  "role": "DEVOPS_ENGINEER",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR017",
+  "userId": "USR017",
+  "name": "Aditya Jain",
+  "email": "aditya.jain@pems.local",
+  "department": "IT",
+  "role": "SOFTWARE_ENGINEER",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR041",
+  "userId": "USR041",
+  "name": "Ravi Kumar",
+  "email": "ravi.kumar@pems.local",
+  "department": "Security",
+  "role": "SECURITY_OFFICER",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B",
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E",
+    "PEMS-F",
+    "PEMS-G",
+    "PEMS-H",
+    "PEMS-I",
+    "PEMS-J"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR064",
+  "userId": "USR064",
+  "name": "Mohan Krishna",
+  "email": "mohan.krishna@pems.local",
+  "department": "Maintenance",
+  "role": "TECHNICIAN",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-C",
+    "PEMS-D",
+    "PEMS-E",
+    "PEMS-F",
+    "PEMS-G",
+    "PEMS-H",
+    "PEMS-I"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR069",
+  "userId": "USR069",
+  "name": "Anil Kumar",
+  "email": "anil.kumar@pems.local",
+  "department": "HR",
+  "role": "HR_EXECUTIVE",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "USR080",
+  "userId": "USR080",
+  "name": "Ashok Kumar",
+  "email": "ashok.kumar@pems.local",
+  "department": "Finance",
+  "role": "FINANCE_MANAGER",
+  "employeeType": "FULL_TIME",
+  "status": "ACTIVE",
+  "allowedPems": [
+    "PEMS-A",
+    "PEMS-B"
+  ],
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+}]

@@ -158,7 +158,7 @@
             const statusDiv =
                 document.getElementById("status");
 
-            if (result.status === "VALID") {
+            if (result.validationStatus === "VALID") {
 
                 statusDiv.className = "valid";
 
@@ -173,7 +173,7 @@
                 statusDiv.className = "invalid";
 
                 statusDiv.innerHTML = `
-                    🔴 ${result.status}
+                    🔴 ${result.validationStatus}
                     <br><br>
                     User: ${result.userId}
                 `;

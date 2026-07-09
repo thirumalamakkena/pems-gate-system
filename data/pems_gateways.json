@@ -1,0 +1,100 @@
+[{
+  "_id": "PEMS-G",
+  "gatewayId": "PEMS-G",
+  "campusId": "CAMPUS-01",
+  "gatewayName": "Warehouse Entry",
+  "building": "Block-04",
+  "status": "ACTIVE",
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "PEMS-I",
+  "gatewayId": "PEMS-I",
+  "campusId": "CAMPUS-01",
+  "gatewayName": "Parking Entrance",
+  "building": "Block-05",
+  "status": "ACTIVE",
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "PEMS-B",
+  "gatewayId": "PEMS-B",
+  "campusId": "CAMPUS-01",
+  "gatewayName": "Reception Gate",
+  "building": "Block-01",
+  "status": "ACTIVE",
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "PEMS-D",
+  "gatewayId": "PEMS-D",
+  "campusId": "CAMPUS-01",
+  "gatewayName": "Operations Entry",
+  "building": "Block-02",
+  "status": "ACTIVE",
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "PEMS-E",
+  "gatewayId": "PEMS-E",
+  "campusId": "CAMPUS-01",
+  "gatewayName": "HR & Finance Access",
+  "building": "Block-03",
+  "status": "ACTIVE",
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "PEMS-H",
+  "gatewayId": "PEMS-H",
+  "campusId": "CAMPUS-01",
+  "gatewayName": "Logistics Gate",
+  "building": "Block-04",
+  "status": "ACTIVE",
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "PEMS-C",
+  "gatewayId": "PEMS-C",
+  "campusId": "CAMPUS-01",
+  "gatewayName": "Engineering Wing",
+  "building": "Block-02",
+  "status": "ACTIVE",
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "PEMS-A",
+  "gatewayId": "PEMS-A",
+  "campusId": "CAMPUS-01",
+  "gatewayName": "Main Entrance",
+  "building": "Block-01",
+  "status": "ACTIVE",
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "PEMS-F",
+  "gatewayId": "PEMS-F",
+  "campusId": "CAMPUS-01",
+  "gatewayName": "Data Center Gate",
+  "building": "Block-03",
+  "status": "ACTIVE",
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+},
+{
+  "_id": "PEMS-J",
+  "gatewayId": "PEMS-J",
+  "campusId": "CAMPUS-01",
+  "gatewayName": "Emergency Exit",
+  "building": "Block-05",
+  "status": "ACTIVE",
+  "createdAt": "2026-06-24T00:00:00Z",
+  "updatedAt": "2026-06-24T00:00:00Z"
+}]

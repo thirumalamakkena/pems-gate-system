@@ -1,349 +1,425 @@
-# PEMS Gate System V1
+# PEMS Analytics & Monitoring Platform
 
-A real-time gate access validation system built using Kafka, FastAPI, MongoDB, WebSockets, and QR-based authentication.
+A real-time event-driven access control and analytics platform built using **FastAPI**, **Apache Kafka**, and **MongoDB Atlas**.
 
----
-
-## Problem Statement
-
-In large organizations, employees enter through multiple Physical Entry Management Systems (PEMS).
-
-The system must:
-
-- Validate employee identity
-- Check whether the employee exists
-- Verify active/inactive status
-- Verify gate access permissions
-- Return validation results in real time
-- Support multiple gate scanners simultaneously
+The platform validates employee QR code scans at multiple PEMS gateways and processes every scan event through independent Kafka consumers for validation, analytics, auditing, and system monitoring.
 
 ---
 
-## Architecture
+# Project Overview
 
-```text
-QR Code
-   |
-   v
+The PEMS Analytics & Monitoring Platform extends a traditional gate access system into a scalable event-driven platform.
 
-Frontend Scanner
-(HTML + JS)
-   |
-   | WebSocket
-   v
+Whenever an employee scans a QR code:
 
-Gateway API
-(FastAPI)
-   |
-   | Kafka Producer
-   v
+- The scan is sent to the FastAPI Gateway.
+- The Gateway publishes the event to Apache Kafka.
+- Multiple independent consumers process the same event.
+- Validation results are returned to the frontend through WebSockets.
+- Every event contributes to analytics, monitoring, and audit history.
 
-Kafka Topic
-(qr-scans)
-   |
-   v
-
-Validation Consumer
-(Python)
-   |
-   | In-Memory Cache
-   v
-
-MongoDB Users
-
-Validation Result
-   |
-   v
-
-Kafka Topic
-(validation-results)
-   |
-   v
-
-Gateway API
-   |
-   | WebSocket
-   v
-
-Frontend Scanner
-
-ACCESS GRANTED / DENIED
-```
+The architecture is designed to be scalable and can evolve into a Smart Campus or Smart City event processing platform.
 
 ---
 
-## Tech Stack
+# Objectives
 
-### Frontend
-
-- HTML
-- CSS
-- JavaScript
-- html5-qrcode
-- WebSockets
-
-### Backend
-
-- FastAPI
-- Kafka
-- kafka-python
-
-### Database
-
-- MongoDB
-
-### Containerization
-
-- Docker
-- Docker Compose
+- Implement a real-time QR code validation system.
+- Design a scalable fan-out event-driven architecture using Apache Kafka.
+- Compute real-time analytics for gate access events.
+- Maintain immutable audit history for every scan.
+- Expose monitoring metrics through REST APIs.
+- Evaluate the performance of the system under different workloads and cache configurations.
 
 ---
 
-## Features
+# System Architecture
 
-### QR Authentication
+![System Architecture](docs/images/pems_architecture.svg)
+---
 
-Employees authenticate using QR codes.
+# Technology Stack
 
-### Real-Time Validation
-
-Validation occurs through Kafka event streaming.
-
-### WebSocket Communication
-
-Validation results are pushed instantly to the scanner.
-
-### User Cache
-
-MongoDB data is loaded into memory for low-latency lookups.
-
-### Multi-Gate Support
-
-Multiple PEMS scanners can connect simultaneously.
+| Layer | Technology |
+|---------|------------|
+| Frontend | HTML, CSS, JavaScript |
+| QR Scanner | html5-qrcode |
+| Backend | FastAPI |
+| Language | Python |
+| Streaming | Apache Kafka |
+| Database | MongoDB Atlas |
+| Communication | WebSocket |
+| Containerization | Docker |
 
 ---
 
-## Data Flow
+# Project Structure
 
-```text
-Employee
-   |
-Scan QR
-   |
-Frontend
-   |
-WebSocket
-   |
-Gateway
-   |
-Kafka (qr-scans)
-   |
-Validation Consumer
-   |
-Mongo Cache Lookup
-   |
-Kafka (validation-results)
-   |
-Gateway
-   |
-WebSocket
-   |
-Frontend
 ```
-
----
-
-## Data Contracts
-
-### Scan Event
-
-```json
-{
-  "userId": "USR001"
-}
-```
-
-### Kafka Event
-
-```json
-{
-  "eventId": "uuid",
-  "userId": "USR001",
-  "pemId": "PEMS-A",
-  "timestamp": "2026-06-18T14:42:02Z"
-}
-```
-
-### Validation Result
-
-```json
-{
-  "eventId": "uuid",
-  "userId": "USR001",
-  "pemId": "PEMS-A",
-  "status": "VALID"
-}
-```
-
----
-
-## Validation Rules
-
-### User Exists
-
-```text
-YES -> Continue
-NO  -> INVALID_USER
-```
-
-### User Active
-
-```text
-ACTIVE   -> Continue
-INACTIVE -> INACTIVE_USER
-```
-
-### Gate Permission
-
-```text
-Allowed     -> VALID
-Not Allowed -> ACCESS_DENIED
-```
-
----
-
-## Project Structure
-
-```text
-PEMS-GATE-SYSTEM-V1
+PEMS-ANALYTICS-PLATFORM
 │
-├── gateway.py
-├── consumer.py
-├── seed_users.py
-├── generate_qr.py
-├── index.html
+├── app
+│   ├── api
+│   │   ├── main.py
+│   │   └── routes
+│   │
+│   ├── config
+│   │   ├── database.py
+│   │   ├── kafka.py
+│   │   └── settings.py
+│   │
+│   ├── consumers
+│   │   ├── validation_consumer.py
+│   │   ├── analytics_consumer.py
+│   │   └── audit_consumer.py
+│   │
+│   ├── repositories
+│   │   ├── user_repository.py
+│   │   ├── gateway_repository.py
+│   │   ├── scan_repository.py
+│   │   ├── analytics_repository.py
+│   │   └── metrics_repository.py
+│   │
+│   ├── services
+│   │   └── validation_service.py
+│   │
+│   ├── utils
+│   │
+│   └── data
+│
+├── frontend
+│
+├── tests
+│
+├── docs
+│
 ├── docker-compose.yml
-├── qrcodes/
+│
+├── requirements.txt
+│
 └── README.md
 ```
 
 ---
 
-## Setup
+# Database Design
 
-### Clone Repository
+## users
+
+Stores employee master information.
+
+Example fields
+
+- userId
+- name
+- role
+- status
+- allowedPems
+
+---
+
+## pems_gateways
+
+Stores gateway master data.
+
+Example fields
+
+- gatewayId
+- gatewayName
+- building
+- campusId
+- status
+
+---
+
+## scan_history
+
+Stores every QR scan event.
+
+Purpose
+
+- Historical reporting
+- Event replay
+- Debugging
+- Audit support
+
+---
+
+## analytics_hourly
+
+Stores hourly aggregated statistics.
+
+Metrics
+
+- Total scans
+- Valid scans
+- Invalid scans
+- Average processing time
+
+---
+
+## metrics
+
+Stores runtime metrics for every service.
+
+Metrics include
+
+- Events processed
+- Events failed
+- Cache hits
+- Cache misses
+- Total latency
+- Last updated
+
+---
+
+# Kafka Topics
+
+## qr-scans
+
+Producer
+
+- FastAPI Gateway
+
+Consumers
+
+- Validation Consumer
+
+
+---
+
+## validation-results
+
+Producer
+
+- Validation Consumer
+
+Consumer
+
+- FastAPI Gateway
+- Analytics Consumer
+- Audit Consumer
+
+---
+
+# Event Flow
+
+![System Architecture](docs/images/event_flow.svg)
+
+---
+
+# MongoDB Collections
+
+| Collection | Purpose |
+|------------|---------|
+| users | Employee master data |
+| pems_gateways | Gateway master data |
+| scan_history | Every scan event |
+| analytics_hourly | Hourly aggregated analytics |
+| metrics | Service monitoring metrics |
+
+---
+
+# Features
+
+- Real-time QR code validation
+- Event-driven architecture
+- Apache Kafka fan-out processing
+- MongoDB Atlas integration
+- WebSocket communication
+- Hourly analytics
+- Immutable event history
+- Cache-enabled validation
+- REST APIs
+- Monitoring metrics
+
+---
+
+# Cache Strategy
+
+The Validation Consumer caches frequently accessed users and gateways in memory.
+
+Benefits
+
+- Reduces MongoDB reads
+- Improves validation latency
+- Reduces database load
+- Improves throughput
+
+Metrics tracked
+
+- Cache Hits
+- Cache Misses
+
+---
+
+# Monitoring
+
+The platform exposes runtime metrics including
+
+- Events Processed
+- Events Failed
+- Average Latency
+- Cache Hits
+- Cache Misses
+
+through REST APIs.
+
+---
+
+# Running the Project
+
+## Clone Repository
 
 ```bash
-git clone <repo-url>
-cd PEMS-GATE-SYSTEM-V1
-```
+git clone <repository-url>
 
-### Install Dependencies
-
-```bash
-pip install fastapi
-pip install uvicorn[standard]
-pip install kafka-python
-pip install pymongo
-pip install qrcode
-```
-
-### Start Kafka
-
-```bash
-docker compose up -d
-```
-
-### Seed MongoDB
-
-```bash
-python seed_users.py
-```
-
-### Generate QR Codes
-
-```bash
-python generate_qr.py
-```
-
-### Start Consumer
-
-```bash
-python consumer.py
-```
-
-### Start Gateway
-
-```bash
-uvicorn gateway:app --reload
-```
-
-### Start Frontend
-
-```bash
-python -m http.server 5500
-```
-
-Open:
-
-```text
-http://localhost:5500/PEM-A
+cd PEMS-ANALYTICS-PLATFORM
 ```
 
 ---
 
-## Sample Status Codes
+## Create Virtual Environment
 
-```text
-VALID
-
-INVALID_USER
-
-INACTIVE_USER
-
-ACCESS_DENIED
+```bash
+python -m venv .venv
 ```
 
 ---
 
-## Data Engineering Concepts Demonstrated
+## Activate
 
-- Event Driven Architecture
-- Producer Consumer Pattern
-- Kafka Messaging
-- Real-Time Stream Processing
+Windows
+
+```bash
+.venv\Scripts\activate
+```
+
+Linux / macOS
+
+```bash
+source .venv/bin/activate
+```
+
+---
+
+## Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## Start Kafka
+
+```bash
+docker-compose up -d
+```
+
+---
+
+## Start Gateway
+
+```bash
+uvicorn app.api.gateway:app --reload
+```
+
+---
+
+## Start Consumers
+
+Validation Consumer
+
+```bash
+python -m app.consumers.validation_consumer
+```
+
+Analytics Consumer
+
+```bash
+python -m app.consumers.analytics_consumer
+```
+
+Audit Consumer
+
+```bash
+python -m app.consumers.audit_consumer
+```
+
+---
+
+## Start Frontend
+
+```bash
+
+python -m http.server 5500 -d frontend
+```
+
+Open
+
+```
+http://localhost:5500/index.html
+```
+
+---
+
+## Start FastAPI
+
+```bash
+uvicorn app.api.main:app --reload
+```
+
+---
+
+# REST APIs
+
+| Endpoint | Description |
+|-----------|-------------|
+| GET / | Health Check |
+| GET /metrics | Service metrics |
+| GET /metrics/{service} | Metrics by service |
+| GET /analytics/hourly | Hourly analytics |
+| GET /analytics/gateway/{pem_id} | Hourly analytics BY PEMID|
+
+
+---
+
+# Future Enhancements
+
+- Redis Distributed Cache
+- Docker Deployment
+- Kubernetes
+- Prometheus Metrics
+- Grafana Dashboard
+- JWT Authentication
+- Role-Based Access Control
+- Multi-campus Deployment
+- Smart City Integration
+- Machine Learning based traffic prediction
+
+---
+
+# Learning Outcomes
+
+This project demonstrates practical implementation of
+
+- Event-Driven Architecture
+- Apache Kafka
+- MongoDB Atlas
+- FastAPI
 - WebSockets
-- Data Contracts
+- Repository Pattern
+- Distributed Systems
 - Caching
-- Distributed Systems Fundamentals
-- Fault Tolerance Foundations
+- Real-Time Analytics
+- Monitoring
+- System Design
 
 ---
 
-## Future Enhancements
+# Author
 
-### V1.1
+**Thirumala**
 
-- Display employee details
-- Enhanced UI
-- Access logs
-
-### V1.2
-
-- Multi-gate analytics
-- Dashboard
-
-### V2.0
-
-- Apache Flink Integration
-- Stateful Stream Processing
-- Window Analytics
-- Real-Time Monitoring
-
----
-
-## Author
-
-Thirumala , Shanmukha
-
-Data Engineering Learning Project
+**Shanmukha Sai Kishore**
