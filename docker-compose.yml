@@ -29,4 +29,9 @@ services:
 
       CLUSTER_ID: MkU3OEVBNTcwNTJENDM2Qk
 
-  
+  redis:
+    image: redis:7
+    container_name: pems-redis
+    ports:
+      - "6379:6379"
+    restart: unless-stopped

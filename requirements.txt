@@ -3,4 +3,5 @@ uvicorn
 pymongo
 kafka-python
 python-dotenv
-pydantic
+pydantic 
+redis

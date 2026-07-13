@@ -28,7 +28,7 @@ USERS = [
     for i in range(1, 101)
 ]
 
-duration = 120  # seconds
+duration = 20  # seconds
 start = time.time()
 
 while time.time() - start < duration:
@@ -50,4 +50,4 @@ while time.time() - start < duration:
 
     print(event)
 
-    time.sleep(random.uniform(0.02, 0.05))
+    time.sleep(random.uniform(0.1, 1.0))

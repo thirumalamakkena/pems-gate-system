@@ -4,7 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <title>PEMS Gate Scanner</title>
-
     <script src="https://unpkg.com/html5-qrcode"></script>
 
     <style>
@@ -111,7 +110,6 @@
         // ==================================
 
         const recentScans = new Map();
-
         // ==================================
         // WebSocket
         // ==================================
@@ -224,7 +222,9 @@
 
             ws.send(
                 JSON.stringify({
-                    userId: decodedText
+                    userId: decodedText,
+                    eventTime:  new Date().toISOString(),
+                    source: "QR_SCANNER"
                 })
             );
         }

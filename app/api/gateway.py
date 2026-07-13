@@ -1,9 +1,10 @@
 from contextlib import asynccontextmanager
-from datetime import datetime, UTC
 import asyncio
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
+
+from app.utils.event_builder import EventBuilder
 
 from app.config.kafka import (
     producer,
@@ -39,7 +40,8 @@ def consume_validation_results():
 
         result = message.value
 
-        pem_id = result.get("pemId")
+        payload = result.get("payload")
+        pem_id = payload.get("pemId")
 
         websocket = active_connections.get(pem_id)
 
@@ -48,7 +50,7 @@ def consume_validation_results():
             try:
 
                 asyncio.run_coroutine_threadsafe(
-                    websocket.send_json(result),
+                    websocket.send_json(payload),
                     main_loop
                 )
 
@@ -144,18 +146,14 @@ async def websocket_endpoint(
 
             print(f"Received -> {data}")
 
-            event = {
 
-                "eventId": generate_event_id(),
-
-                "userId": data["userId"],
-
-                "pemId": pem_id,
-
-                "scanTimestamp": datetime.now().isoformat(),
-
-                "source": "QR_SCANNER"
-            }
+            event = EventBuilder.qr_scan_event(
+                event_id=generate_event_id(),
+                user_id=data["userId"],
+                pem_id=pem_id,
+                event_time=data["eventTime"],
+                source=data["source"]
+            )
 
             producer.send(
                 QR_SCAN_TOPIC,
@@ -163,8 +161,8 @@ async def websocket_endpoint(
             )
 
             producer.flush()
-
-            print(f"Produced -> {event['eventId']}")
+            event_id = event["payload"]
+            print(f"Produced -> {event_id}")
 
     except WebSocketDisconnect:
 

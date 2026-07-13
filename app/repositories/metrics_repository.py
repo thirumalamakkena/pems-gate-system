@@ -39,13 +39,13 @@ class MetricsRepository:
             }
         )
 
-    def increment_cache_hit(self, service_name):
+    def increment_cache_hit(self, service_name,cache_hits):
 
         self.collection.update_one(
             {"serviceName": service_name},
             {
                 "$inc": {
-                    "cacheHits": 1
+                    "cacheHits": cache_hits
                 },
                 "$set": {
                     "lastUpdated": datetime.now()
@@ -53,13 +53,13 @@ class MetricsRepository:
             }
         )
 
-    def increment_cache_miss(self, service_name):
+    def increment_cache_miss(self, service_name,cache_miss):
 
         self.collection.update_one(
             {"serviceName": service_name},
             {
                 "$inc": {
-                    "cacheMisses": 1
+                    "cacheMisses": cache_miss
                 },
                 "$set": {
                     "lastUpdated": datetime.now()

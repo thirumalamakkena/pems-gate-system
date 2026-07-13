@@ -6,7 +6,11 @@ import json
 
 
 from app.config.settings import (
-    KAFKA_BOOTSTRAP_SERVERS,QR_SCAN_TOPIC,VALIDATION_RESULTS_TOPIC
+    KAFKA_BOOTSTRAP_SERVERS,
+    QR_SCAN_TOPIC,
+    VALIDATION_RESULTS_TOPIC,
+    RETRY_VALIDATION_TOPIC,
+    DEAD_LETTER_TOPIC
 )
 
 producer = KafkaProducer(
@@ -28,6 +32,22 @@ validation_results_consumer = KafkaConsumer(
     bootstrap_servers = KAFKA_BOOTSTRAP_SERVERS,
     auto_offset_reset="latest",
     group_id="gateway-group",
+    value_deserializer = lambda v: json.loads(v.decode("utf-8"))
+)
+
+retry_consumer = KafkaConsumer(
+    RETRY_VALIDATION_TOPIC,
+    bootstrap_servers = KAFKA_BOOTSTRAP_SERVERS,
+    auto_offset_reset="latest",
+    group_id="retry-group",
+    value_deserializer = lambda v: json.loads(v.decode("utf-8"))
+)
+
+dead_letter_consumer = KafkaConsumer(
+    DEAD_LETTER_TOPIC,
+    bootstrap_servers = KAFKA_BOOTSTRAP_SERVERS,
+    auto_offset_reset="latest",
+    group_id="dead-letter-group",
     value_deserializer = lambda v: json.loads(v.decode("utf-8"))
 )
 
