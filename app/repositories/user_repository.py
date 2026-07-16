@@ -1,6 +1,5 @@
 from app.config.database import db
 
-
 class UserRepository:
 
     def __init__(self):

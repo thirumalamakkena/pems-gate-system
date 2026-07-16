@@ -1,6 +1,5 @@
 from app.config.database import db
 
-
 class GatewayRepository:
 
     def __init__(self):

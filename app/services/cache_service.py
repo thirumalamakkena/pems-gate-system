@@ -1,7 +1,5 @@
 import json
-
 from app.config.redis import redis_client
-
 
 class CacheService:
 

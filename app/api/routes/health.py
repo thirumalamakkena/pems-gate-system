@@ -7,5 +7,6 @@ router = APIRouter()
 def health():
 
     return {
-        "status": "UP"
+        "status": "UP",
+        "service": "PEMS Gateway"
     }

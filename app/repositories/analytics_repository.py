@@ -1,7 +1,7 @@
-from datetime import datetime, timezone
-
+from app.utils.current_time_stamp import (CurrentTimeStamp)
 from app.config.database import db
 
+time_stamp = CurrentTimeStamp()
 
 class AnalyticsRepository:
 
@@ -13,10 +13,10 @@ class AnalyticsRepository:
         event
     ):
 
-        scan_time = event["scanTimestamp"]
+        event_time = event["eventTime"]
 
         # Round down to the beginning of the hour
-        hour = scan_time.replace(
+        hour = event_time.replace(
             minute=0,
             second=0,
             microsecond=0
@@ -40,12 +40,12 @@ class AnalyticsRepository:
                     if event["validationStatus"] != "VALID"
                     else 0
                 ),
-                "processingTimeSum": event["processingTimeMs"]
+                "totalProcessingLatencyMs": event["processingTimeMs"]
             },
             "$set": {
                 "hour": hour,
                 "pemId": event["pemId"],
-                "lastUpdated": datetime.now()
+                "lastUpdated": time_stamp.current_time()
             }
         }
 

@@ -1,10 +1,11 @@
-import traceback,time
+import time
 from datetime import datetime
-from pymongo.errors import DuplicateKeyError
+from app.metrics import metrics_buffer
+from app.metrics.metrics_flusher import MetricsFlusher
 from app.utils.current_time_stamp import (
     CurrentTimeStamp
 )
-
+ 
 from app.config.kafka import (
     retry_consumer,
     producer
@@ -21,9 +22,7 @@ from app.services.validation_service import (
     ValidationService
 )
 
-
-
-
+MetricsFlusher().start()
 validation_service = ValidationService()
 
 current_time_stamp = CurrentTimeStamp()
@@ -36,6 +35,7 @@ for message in retry_consumer:
 
     try:
         arrived_at = current_time_stamp.current_time_iso()
+        
         start_time = time.time()
         event = message.value
 
@@ -50,17 +50,17 @@ for message in retry_consumer:
             f"Offset={message.offset} "
             f"Event={metadata['eventId']}"
         )
-        
-        if metadata["nextRetryAt"] == None:
-            metadata["nextRetryAt"] = current_time_stamp.current_time_iso()
-        
-        now = current_time_stamp.current_time()
-        next_retry = datetime.fromisoformat(
-            metadata["nextRetryAt"].replace("Z", "+00:00")
-        )
 
-        if now < next_retry:
-            time.sleep((next_retry - now).total_seconds())
+        
+        if metadata["nextRetryAt"] != None:
+
+            now = current_time_stamp.current_time()
+            next_retry = datetime.fromisoformat(
+                metadata["nextRetryAt"].replace("Z", "+00:00")
+            )
+
+            if now < next_retry:
+                time.sleep((next_retry - now).total_seconds())
 
         validation_result = (
             validation_service.validate(
@@ -76,28 +76,6 @@ for message in retry_consumer:
             (end_time - start_time) * 1000,
             2
         )
-
-        # result = {
-        #     "eventId": event["eventId"],
-        #     **payload,
-        #     "validationStatus": validation_result["status"],
-        #     "scanTimestamp": datetime.now(),
-        #     "processingTimeMs": processing_time_ms,
-        #     "createdAt": datetime.now(),
-        # }
-
-        # scan_repository.insert_scan(result)
-
-        # metrics_repository.increment_processed(
-        #     "validation-consumer"
-        # )
-
-
-        # metrics_repository.update_latency(
-        #     "validation-consumer",
-        #     processing_time_ms
-        # )
-
 
         kafka_topic_result = {
             
@@ -115,23 +93,33 @@ for message in retry_consumer:
              }
 
         }
-        print(kafka_topic_result)
-    
-
+ 
         producer.send(
             VALIDATION_RESULTS_TOPIC,
             kafka_topic_result
         )
         
         producer.flush()
+
         retry_consumer.commit() 
 
-    # except DuplicateKeyError:
-    #     print(f"Duplicate Event: {event['eventId']}")
-    #     validation_consumer.commit()
-       
+        metrics_buffer.increment(
+            "retry-consumer",
+            "eventsProcessed"
+        )
+
+        metrics_buffer.add(
+            "retry-consumer",
+            "totalProcessingLatencyMs",
+            processing_time_ms
+        )
+
     except Exception as e:
-        # metrics_repository.increment_failed("validation-consumer")
+
+        metrics_buffer.increment(
+            "retry-consumer",
+            "eventsFailed"
+        )
 
         retry_count = int(metadata["retryCount"])
         if retry_count < MAX_RETRY_ATTEMPTS:
@@ -154,7 +142,6 @@ for message in retry_consumer:
             event["payload"]["failureReason"] = str(e)
             metadata.update({
                 "replayed": False,
-                "replayedAt": None,
                 "replayedBy": None
             })
 
@@ -168,7 +155,6 @@ for message in retry_consumer:
         print(
             f"Error processing event: {e}"
         )
-        traceback.print_exc()
 
 
                     

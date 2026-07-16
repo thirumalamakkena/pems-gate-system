@@ -1,0 +1,87 @@
+<svg width="920" height="700" viewBox="0 0 920 700" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="a-gray" viewBox="0 0 12 12" refX="9" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M1 1L10 6L1 11" fill="none" stroke="#334155" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="a-teal" viewBox="0 0 12 12" refX="9" refY="6" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M1 1L10 6L1 11" fill="none" stroke="#0F766E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="a-amber" viewBox="0 0 12 12" refX="9" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M1 1L10 6L1 11" fill="none" stroke="#B45309" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="1.5" stdDeviation="2.5" flood-color="#0F172A" flood-opacity="0.12"/></filter>
+  </defs>
+
+  <rect x="0" y="0" width="920" height="700" fill="#FFFFFF"/>
+  <rect x="0" y="0" width="920" height="90" fill="#1E3A8A"/>
+  <text x="460" y="40" text-anchor="middle" font-size="24" font-weight="600" fill="#FFFFFF">Metrics Pipeline</text>
+  <text x="460" y="66" text-anchor="middle" font-size="13" fill="#BFDBFE">In-memory buffering with periodic batch flush to MongoDB</text>
+
+  <!-- Validation Consumer -->
+  <g filter="url(#shadow)"><rect x="340" y="110" width="220" height="56" rx="10" fill="#CCFBF1" stroke="#0F766E" stroke-width="1.6"/></g>
+  <text x="450" y="144" text-anchor="middle" font-size="15" font-weight="600" fill="#0F766E">Validation Consumer</text>
+  <line x1="450" y1="166" x2="450" y2="196" stroke="#334155" stroke-width="2.2" marker-end="url(#a-gray)"/>
+  <text x="466" y="184" font-size="11.5" font-style="italic" fill="#64748B">emits a metric per scan</text>
+
+  <!-- Multiple discrete events over time -->
+  <g>
+    <rect x="245" y="200" width="70" height="30" rx="15" fill="#F0FDFA" stroke="#0F766E" stroke-width="1.4"/>
+    <text x="280" y="219" text-anchor="middle" font-size="12" fill="#0F766E">scan #1</text>
+    <rect x="330" y="200" width="70" height="30" rx="15" fill="#F0FDFA" stroke="#0F766E" stroke-width="1.4"/>
+    <text x="365" y="219" text-anchor="middle" font-size="12" fill="#0F766E">scan #2</text>
+    <rect x="415" y="200" width="70" height="30" rx="15" fill="#F0FDFA" stroke="#0F766E" stroke-width="1.4"/>
+    <text x="450" y="219" text-anchor="middle" font-size="12" fill="#0F766E">scan #3</text>
+    <rect x="500" y="200" width="70" height="30" rx="15" fill="#F0FDFA" stroke="#0F766E" stroke-width="1.4"/>
+    <text x="535" y="219" text-anchor="middle" font-size="12" fill="#0F766E">scan #4</text>
+    <rect x="585" y="200" width="70" height="30" rx="15" fill="#F0FDFA" stroke="#0F766E" stroke-width="1.4"/>
+    <text x="620" y="219" text-anchor="middle" font-size="12" fill="#0F766E">scan #5</text>
+  </g>
+  <text x="450" y="196" text-anchor="middle" font-size="11" font-style="italic" fill="#64748B" transform="translate(0,-4)"></text>
+
+  <!-- Converging arrows into buffer -->
+  <line x1="280" y1="230" x2="330" y2="260" stroke="#0F766E" stroke-width="1.8" marker-end="url(#a-teal)"/>
+  <line x1="365" y1="230" x2="390" y2="260" stroke="#0F766E" stroke-width="1.8" marker-end="url(#a-teal)"/>
+  <line x1="450" y1="230" x2="450" y2="260" stroke="#0F766E" stroke-width="1.8" marker-end="url(#a-teal)"/>
+  <line x1="535" y1="230" x2="510" y2="260" stroke="#0F766E" stroke-width="1.8" marker-end="url(#a-teal)"/>
+  <line x1="620" y1="230" x2="570" y2="260" stroke="#0F766E" stroke-width="1.8" marker-end="url(#a-teal)"/>
+
+  <!-- Metrics Buffer -->
+  <g filter="url(#shadow)"><rect x="230" y="264" width="440" height="92" rx="12" fill="#FEF3C7" stroke="#B45309" stroke-width="1.8"/></g>
+  <text x="450" y="292" text-anchor="middle" font-size="16" font-weight="700" fill="#92400E">Metrics Buffer</text>
+  <text x="450" y="310" text-anchor="middle" font-size="12" fill="#B45309">in-memory accumulator</text>
+  <rect x="330" y="320" width="18" height="18" rx="3" fill="#FDE68A" stroke="#B45309" stroke-width="1.2"/>
+  <rect x="358" y="320" width="18" height="18" rx="3" fill="#FDE68A" stroke="#B45309" stroke-width="1.2"/>
+  <rect x="386" y="320" width="18" height="18" rx="3" fill="#FDE68A" stroke="#B45309" stroke-width="1.2"/>
+  <rect x="414" y="320" width="18" height="18" rx="3" fill="#FDE68A" stroke="#B45309" stroke-width="1.2"/>
+  <rect x="442" y="320" width="18" height="18" rx="3" fill="#FDE68A" stroke="#B45309" stroke-width="1.2"/>
+  <text x="480" y="334" font-size="11.5" fill="#92400E">5 events buffered, waiting to flush</text>
+
+  <!-- Buffer -> Flusher -->
+  <line x1="450" y1="356" x2="450" y2="392" stroke="#B45309" stroke-width="2.4" marker-end="url(#a-amber)"/>
+  <text x="466" y="380" font-size="12.5" font-weight="600" fill="#B45309">every 5 seconds</text>
+
+  <!-- Metrics Flusher -->
+  <g filter="url(#shadow)"><rect x="340" y="396" width="220" height="56" rx="10" fill="#FDE68A" stroke="#B45309" stroke-width="1.8"/></g>
+  <text x="450" y="430" text-anchor="middle" font-size="15" font-weight="700" fill="#7C2D12">Metrics Flusher</text>
+
+  <!-- Flusher -> MongoDB, one batched write -->
+  <line x1="450" y1="452" x2="450" y2="492" stroke="#15803D" stroke-width="2.6" marker-end="url(#a-teal)"/>
+  <text x="466" y="480" font-size="12" font-style="italic" fill="#15803D">one batched write</text>
+
+  <!-- MongoDB metrics collection (cylinder) -->
+  <ellipse cx="450" cy="580" rx="80" ry="15" fill="#DCFCE7" stroke="#15803D" stroke-width="1.6"/>
+  <rect x="370" y="500" width="160" height="80" fill="#DCFCE7"/>
+  <line x1="370" y1="500" x2="370" y2="580" stroke="#15803D" stroke-width="1.6"/>
+  <line x1="530" y1="500" x2="530" y2="580" stroke="#15803D" stroke-width="1.6"/>
+  <ellipse cx="450" cy="500" rx="80" ry="15" fill="#DCFCE7" stroke="#15803D" stroke-width="1.6"/>
+  <text x="450" y="544" text-anchor="middle" font-size="13.5" font-weight="600" fill="#166534">MongoDB</text>
+  <text x="450" y="562" text-anchor="middle" font-size="12.5" fill="#15803D">metrics collection</text>
+
+  <!-- ================= Callouts ================= -->
+  <path d="M672 300 L740 260" stroke="#B45309" stroke-width="1.4" fill="none" stroke-dasharray="4 3"/>
+  <g filter="url(#shadow)"><rect x="740" y="222" width="150" height="42" rx="8" fill="#FFFBEB" stroke="#B45309" stroke-width="1.4"/></g>
+  <text x="815" y="248" text-anchor="middle" font-size="13" font-weight="700" fill="#92400E">Batch Updates</text>
+
+  <path d="M540 480 L740 462" stroke="#15803D" stroke-width="1.4" fill="none" stroke-dasharray="4 3"/>
+  <g filter="url(#shadow)"><rect x="740" y="426" width="160" height="42" rx="8" fill="#F0FDF4" stroke="#15803D" stroke-width="1.4"/></g>
+  <text x="820" y="452" text-anchor="middle" font-size="12.5" font-weight="700" fill="#166534">Reduced Database Writes</text>
+
+  <path d="M530 545 L740 600" stroke="#1D4ED8" stroke-width="1.4" fill="none" stroke-dasharray="4 3"/>
+  <g filter="url(#shadow)"><rect x="740" y="578" width="150" height="42" rx="8" fill="#EFF6FF" stroke="#1D4ED8" stroke-width="1.4"/></g>
+  <text x="815" y="604" text-anchor="middle" font-size="13" font-weight="700" fill="#1E3A8A">Improved Throughput</text>
+
+</svg>

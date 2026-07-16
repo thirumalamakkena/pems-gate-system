@@ -1,0 +1,193 @@
+<svg width="2260" height="850" viewBox="0 0 2260 850" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="a-gray" viewBox="0 0 12 12" refX="9" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M1 1L10 6L1 11" fill="none" stroke="#334155" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="a-green" viewBox="0 0 12 12" refX="9" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M1 1L10 6L1 11" fill="none" stroke="#15803D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="a-orange" viewBox="0 0 12 12" refX="9" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M1 1L10 6L1 11" fill="none" stroke="#C2410C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="a-red" viewBox="0 0 12 12" refX="9" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M1 1L10 6L1 11" fill="none" stroke="#B91C1C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="a-slate" viewBox="0 0 12 12" refX="9" refY="6" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M1 1L10 6L1 11" fill="none" stroke="#64748B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="1.5" stdDeviation="2.5" flood-color="#0F172A" flood-opacity="0.12"/></filter>
+  </defs>
+
+  <rect x="0" y="0" width="2260" height="850" fill="#FFFFFF"/>
+  <rect x="0" y="0" width="2260" height="90" fill="#1E3A8A"/>
+  <text x="1130" y="40" text-anchor="middle" font-size="25" font-weight="600" fill="#FFFFFF">PEMS Analytics &amp; Monitoring Platform V3</text>
+  <text x="1130" y="66" text-anchor="middle" font-size="14" fill="#BFDBFE">Overall system architecture &#8212; event-driven access control pipeline</text>
+
+  <!-- ================= WebSocket response loop (routed above main flow) ================= -->
+  <path d="M1375 292 L1375 112 L635 112 L635 288" fill="none" stroke="#15803D" stroke-width="2" stroke-dasharray="7 4" marker-end="url(#a-green)"/>
+  <text x="1000" y="106" text-anchor="middle" font-size="12" fill="#15803D" font-style="italic">WebSocket response (async, success or denial)</text>
+
+  <!-- ================= Main ingestion spine ================= -->
+  <!-- Employee -->
+  <g filter="url(#shadow)"><rect x="40" y="288" width="170" height="64" rx="10" fill="#EFF6FF" stroke="#2563EB" stroke-width="1.6"/></g>
+  <circle cx="70" cy="320" r="12" fill="#2563EB"/><circle cx="70" cy="316" r="4" fill="#EFF6FF"/>
+  <path d="M64 324 q6 -6 12 0" stroke="#EFF6FF" stroke-width="2" fill="none"/>
+  <text x="92" y="325" font-size="15" font-weight="600" fill="#1E3A8A">Employee</text>
+  <line x1="210" y1="320" x2="270" y2="320" stroke="#334155" stroke-width="2.4" marker-end="url(#a-gray)"/>
+
+  <!-- QR Scanner / Frontend -->
+  <g filter="url(#shadow)"><rect x="280" y="288" width="190" height="64" rx="10" fill="#EFF6FF" stroke="#2563EB" stroke-width="1.6"/></g>
+  <rect x="300" y="304" width="26" height="26" rx="3" fill="none" stroke="#2563EB" stroke-width="2"/>
+  <path d="M300 311 h6 M300 304 v6 M326 304 v6 M320 304 h6 M300 323 h6 M300 330 v-6 M326 330 v-6 M320 330 h6" stroke="#2563EB" stroke-width="1.8" fill="none"/>
+  <text x="336" y="316" font-size="14" font-weight="600" fill="#1E3A8A">QR scanner</text>
+  <text x="336" y="333" font-size="11.5" fill="#3B82F6">Frontend &#183; HTML/JS</text>
+  <line x1="470" y1="320" x2="530" y2="320" stroke="#334155" stroke-width="2.4" marker-end="url(#a-gray)"/>
+
+  <!-- FastAPI Gateway -->
+  <g filter="url(#shadow)"><rect x="540" y="288" width="190" height="64" rx="10" fill="#DBEAFE" stroke="#1E3A8A" stroke-width="1.8"/></g>
+  <polygon points="562,304 574,304 568,316 576,316 558,330 564,318 556,318" fill="#1E3A8A"/>
+  <text x="586" y="316" font-size="14" font-weight="600" fill="#1E3A8A">FastAPI Gateway</text>
+  <text x="586" y="333" font-size="11.5" fill="#1D4ED8">REST + WebSocket</text>
+  <line x1="730" y1="320" x2="780" y2="320" stroke="#334155" stroke-width="2.4" marker-end="url(#a-gray)"/>
+
+  <!-- qr-scans topic -->
+  <g filter="url(#shadow)"><rect x="790" y="292" width="190" height="56" rx="8" fill="#EFF6FF" stroke="#1D4ED8" stroke-width="1.8" stroke-dasharray="7 4"/></g>
+  <path d="M812 308 h11 M812 318 h11 M812 328 h11" stroke="#1D4ED8" stroke-width="2"/>
+  <text x="838" y="314" font-size="13" font-weight="600" fill="#1E3A8A">Kafka topic</text>
+  <text x="838" y="331" font-size="13" fill="#1D4ED8">qr-scans</text>
+
+  <!-- Fan out to 3 consumers -->
+  <line x1="980" y1="320" x2="1035" y2="190" stroke="#334155" stroke-width="2.4" marker-end="url(#a-gray)"/>
+  <line x1="980" y1="320" x2="1035" y2="320" stroke="#334155" stroke-width="2.4" marker-end="url(#a-gray)"/>
+  <line x1="980" y1="320" x2="1035" y2="450" stroke="#334155" stroke-width="2.4" marker-end="url(#a-gray)"/>
+
+  <!-- ================= Consumers column ================= -->
+  <!-- Validation Consumer -->
+  <g filter="url(#shadow)"><rect x="1040" y="158" width="190" height="64" rx="10" fill="#CCFBF1" stroke="#0F766E" stroke-width="1.6"/></g>
+  <text x="1135" y="184" text-anchor="middle" font-size="14" font-weight="600" fill="#0F766E">Validation Consumer</text>
+  <circle cx="1058" cy="202" r="4" fill="#B45309"/>
+  <text x="1068" y="206" font-size="10.5" fill="#92400E">metrics buffer</text>
+
+  <!-- Analytics Consumer -->
+  <g filter="url(#shadow)"><rect x="1040" y="288" width="190" height="64" rx="10" fill="#CCFBF1" stroke="#0F766E" stroke-width="1.6"/></g>
+  <text x="1135" y="314" text-anchor="middle" font-size="14" font-weight="600" fill="#0F766E">Analytics Consumer</text>
+  <circle cx="1058" cy="332" r="4" fill="#B45309"/>
+  <text x="1068" y="336" font-size="10.5" fill="#92400E">metrics buffer</text>
+
+  <!-- Audit Consumer -->
+  <g filter="url(#shadow)"><rect x="1040" y="418" width="190" height="64" rx="10" fill="#CCFBF1" stroke="#0F766E" stroke-width="1.6"/></g>
+  <text x="1135" y="444" text-anchor="middle" font-size="14" font-weight="600" fill="#0F766E">Audit Consumer</text>
+  <circle cx="1058" cy="462" r="4" fill="#B45309"/>
+  <text x="1068" y="466" font-size="10.5" fill="#92400E">metrics buffer</text>
+
+  <!-- Validation -> validation-results (success) -->
+  <line x1="1230" y1="190" x2="1275" y2="310" stroke="#15803D" stroke-width="2.4" marker-end="url(#a-green)"/>
+
+  <!-- ================= validation-results topic ================= -->
+  <g filter="url(#shadow)"><rect x="1280" y="292" width="190" height="56" rx="8" fill="#EFF6FF" stroke="#1D4ED8" stroke-width="1.8" stroke-dasharray="7 4"/></g>
+  <path d="M1302 308 h11 M1302 318 h11 M1302 328 h11" stroke="#1D4ED8" stroke-width="2"/>
+  <text x="1328" y="314" font-size="13" font-weight="600" fill="#1E3A8A">Kafka topic</text>
+  <text x="1328" y="331" font-size="12.5" fill="#1D4ED8">validation-results</text>
+
+  <!-- validation-results -> Analytics / Audit (also consumed by them) -->
+  <line x1="1278" y1="330" x2="1235" y2="335" stroke="#15803D" stroke-width="2.2" marker-end="url(#a-green)"/>
+  <path d="M1280 340 C 1250 400, 1250 440, 1235 452" fill="none" stroke="#15803D" stroke-width="2.2" marker-end="url(#a-green)"/>
+
+  <!-- ================= Retry lane ================= -->
+  <path d="M1050 222 L1010 222 L1010 620 L1035 620" fill="none" stroke="#C2410C" stroke-width="2.2" marker-end="url(#a-orange)"/>
+  <text x="905" y="420" font-size="12" fill="#C2410C" font-style="italic" transform="rotate(-90 905 420)">fails validation</text>
+
+  <g filter="url(#shadow)"><rect x="1040" y="592" width="190" height="56" rx="8" fill="#FFF7ED" stroke="#C2410C" stroke-width="1.8" stroke-dasharray="7 4"/></g>
+  <path d="M1062 606 h11 M1062 616 h11 M1062 626 h11" stroke="#C2410C" stroke-width="2"/>
+  <text x="1088" y="612" font-size="13" font-weight="600" fill="#9A3412">Kafka topic</text>
+  <text x="1088" y="629" font-size="12.5" fill="#C2410C">retry-validation</text>
+
+  <line x1="1230" y1="620" x2="1275" y2="620" stroke="#C2410C" stroke-width="2.2" marker-end="url(#a-orange)"/>
+
+  <!-- Retry Consumer -->
+  <g filter="url(#shadow)"><rect x="1280" y="592" width="190" height="56" rx="10" fill="#FFEDD5" stroke="#C2410C" stroke-width="1.6"/></g>
+  <text x="1375" y="614" text-anchor="middle" font-size="13.5" font-weight="600" fill="#9A3412">Retry Consumer</text>
+  <circle cx="1298" cy="632" r="3.5" fill="#B45309"/>
+  <text x="1307" y="636" font-size="10" fill="#92400E">metrics buffer</text>
+
+  <!-- Retry Consumer -> validation-results (recovered success) -->
+  <line x1="1375" y1="592" x2="1375" y2="352" stroke="#15803D" stroke-width="2.2" marker-end="url(#a-green)"/>
+  <text x="1388" y="480" font-size="11.5" fill="#15803D" font-style="italic">recovered</text>
+
+  <!-- Retry Consumer -> dead-letter-validation (permanent failure) -->
+  <line x1="1470" y1="620" x2="1515" y2="620" stroke="#B91C1C" stroke-width="2.4" marker-end="url(#a-red)"/>
+
+  <g filter="url(#shadow)"><rect x="1520" y="592" width="190" height="56" rx="8" fill="#FEF2F2" stroke="#B91C1C" stroke-width="1.8" stroke-dasharray="7 4"/></g>
+  <path d="M1542 606 h11 M1542 616 h11 M1542 626 h11" stroke="#B91C1C" stroke-width="2"/>
+  <text x="1568" y="612" font-size="13" font-weight="600" fill="#7F1D1D">Kafka topic</text>
+  <text x="1568" y="629" font-size="12" fill="#B91C1C">dead-letter-validation</text>
+
+  <line x1="1710" y1="620" x2="1755" y2="620" stroke="#B91C1C" stroke-width="2.4" marker-end="url(#a-red)"/>
+
+  <!-- DLQ Consumer -->
+  <g filter="url(#shadow)"><rect x="1760" y="592" width="190" height="56" rx="10" fill="#FEE2E2" stroke="#B91C1C" stroke-width="1.6"/></g>
+  <text x="1855" y="614" text-anchor="middle" font-size="13.5" font-weight="600" fill="#7F1D1D">DLQ Consumer</text>
+  <circle cx="1778" cy="632" r="3.5" fill="#B45309"/>
+  <text x="1787" y="636" font-size="10" fill="#92400E">metrics buffer</text>
+
+  <!-- DLQ Consumer -> MongoDB (Dead Letter Events) -->
+  <path d="M1950 610 L1980 610 L1980 460 L2005 460" fill="none" stroke="#B91C1C" stroke-width="2.2" marker-end="url(#a-red)"/>
+
+  <!-- ================= Direct writes to MongoDB ================= -->
+  <!-- Validation Consumer -> Users / Gateways / Scan History -->
+  <line x1="1230" y1="175" x2="2005" y2="205" stroke="#15803D" stroke-width="1.8" marker-end="url(#a-green)"/>
+  <line x1="1230" y1="185" x2="2005" y2="255" stroke="#15803D" stroke-width="1.8" marker-end="url(#a-green)"/>
+  <line x1="1230" y1="200" x2="2005" y2="305" stroke="#15803D" stroke-width="1.8" marker-end="url(#a-green)"/>
+  <text x="1620" y="185" font-size="11.5" fill="#15803D" font-style="italic">writes: users &#183; gateways &#183; scan_history</text>
+
+  <!-- Analytics Consumer -> Analytics collection (routed under validation-results topic) -->
+  <path d="M1230 335 C 1300 385, 1850 385, 2005 358" fill="none" stroke="#15803D" stroke-width="1.8" marker-end="url(#a-green)"/>
+
+  <!-- ================= Metrics Flusher ================= -->
+  <path d="M1135 483 C 1300 520, 1500 520, 1650 522" fill="none" stroke="#64748B" stroke-width="1.8" stroke-dasharray="5 4" marker-end="url(#a-slate)"/>
+  <text x="1300" y="512" font-size="11.5" fill="#64748B" font-style="italic">polls buffered metrics</text>
+
+  <g filter="url(#shadow)"><rect x="1650" y="500" width="220" height="56" rx="10" fill="#FEF3C7" stroke="#B45309" stroke-width="1.6"/></g>
+  <text x="1760" y="522" text-anchor="middle" font-size="14" font-weight="600" fill="#92400E">Metrics Flusher</text>
+  <text x="1760" y="539" text-anchor="middle" font-size="11" fill="#B45309">periodic flush job</text>
+
+  <line x1="1870" y1="515" x2="2005" y2="408" stroke="#B45309" stroke-width="2" marker-end="url(#a-slate)"/>
+
+  <!-- ================= MongoDB Atlas ================= -->
+  <rect x="2010" y="140" width="220" height="360" rx="14" fill="#F0FDF4" stroke="#16A34A" stroke-width="1.6"/>
+  <ellipse cx="2035" cy="162" rx="9" ry="4.5" fill="none" stroke="#16A34A" stroke-width="1.8"/>
+  <path d="M2026 162 v8 a9 4.5 0 0 0 18 0 v-8" fill="none" stroke="#16A34A" stroke-width="1.8"/>
+  <text x="2050" y="167" font-size="14" font-weight="700" fill="#166534">MongoDB Atlas</text>
+
+  <g filter="url(#shadow)"><rect x="2025" y="188" width="180" height="34" rx="6" fill="#FFFFFF" stroke="#16A34A" stroke-width="1.2"/></g>
+  <text x="2115" y="210" text-anchor="middle" font-size="13" fill="#166534">Users</text>
+
+  <g filter="url(#shadow)"><rect x="2025" y="238" width="180" height="34" rx="6" fill="#FFFFFF" stroke="#16A34A" stroke-width="1.2"/></g>
+  <text x="2115" y="260" text-anchor="middle" font-size="13" fill="#166534">Gateways</text>
+
+  <g filter="url(#shadow)"><rect x="2025" y="288" width="180" height="34" rx="6" fill="#FFFFFF" stroke="#16A34A" stroke-width="1.2"/></g>
+  <text x="2115" y="310" text-anchor="middle" font-size="13" fill="#166534">Scan History</text>
+
+  <g filter="url(#shadow)"><rect x="2025" y="338" width="180" height="34" rx="6" fill="#FFFFFF" stroke="#16A34A" stroke-width="1.2"/></g>
+  <text x="2115" y="360" text-anchor="middle" font-size="13" fill="#166534">Analytics</text>
+
+  <g filter="url(#shadow)"><rect x="2025" y="388" width="180" height="34" rx="6" fill="#FFFFFF" stroke="#B45309" stroke-width="1.2"/></g>
+  <text x="2115" y="410" text-anchor="middle" font-size="13" fill="#92400E">Metrics</text>
+
+  <g filter="url(#shadow)"><rect x="2025" y="438" width="180" height="34" rx="6" fill="#FFFFFF" stroke="#B91C1C" stroke-width="1.2"/></g>
+  <text x="2115" y="460" text-anchor="middle" font-size="13" fill="#7F1D1D">Dead Letter Events</text>
+
+  <!-- ================= Legend ================= -->
+  <g transform="translate(60, 740)">
+    <rect x="0" y="-14" width="16" height="16" rx="3" fill="#EFF6FF" stroke="#1D4ED8" stroke-dasharray="3 2"/>
+    <text x="22" y="-2" font-size="13" fill="#334155">Kafka topic</text>
+
+    <line x1="150" y1="-6" x2="185" y2="-6" stroke="#334155" stroke-width="2.4"/>
+    <text x="195" y="-2" font-size="13" fill="#334155">Ingestion flow</text>
+
+    <line x1="340" y1="-6" x2="375" y2="-6" stroke="#15803D" stroke-width="2.4"/>
+    <text x="385" y="-2" font-size="13" fill="#334155">Successful path</text>
+
+    <line x1="540" y1="-6" x2="575" y2="-6" stroke="#C2410C" stroke-width="2.4"/>
+    <text x="585" y="-2" font-size="13" fill="#334155">Retry path</text>
+
+    <line x1="700" y1="-6" x2="735" y2="-6" stroke="#B91C1C" stroke-width="2.4"/>
+    <text x="745" y="-2" font-size="13" fill="#334155">Dead-letter path</text>
+
+    <line x1="900" y1="-6" x2="935" y2="-6" stroke="#64748B" stroke-width="2" stroke-dasharray="5 4"/>
+    <text x="945" y="-2" font-size="13" fill="#334155">Metrics buffer / flush</text>
+
+    <circle cx="1170" cy="-6" r="4" fill="#B45309"/>
+    <text x="1182" y="-2" font-size="13" fill="#334155">Per-consumer metrics buffer</text>
+  </g>
+</svg>

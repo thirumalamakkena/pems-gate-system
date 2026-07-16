@@ -1,0 +1,118 @@
+<svg width="1000" height="800" viewBox="0 0 1000 800" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+  <defs>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="1.5" stdDeviation="2.5" flood-color="#0F172A" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+
+  <rect x="0" y="0" width="1000" height="800" fill="#FFFFFF"/>
+
+  <!-- Header -->
+  <rect x="0" y="0" width="1000" height="90" fill="#1E3A8A"/>
+  <text x="500" y="42" text-anchor="middle" font-size="24" font-weight="600" fill="#FFFFFF">Event Envelope</text>
+  <text x="500" y="68" text-anchor="middle" font-size="13" fill="#BFDBFE">Structure of every message published to Kafka topics</text>
+
+  <!-- Outer JSON object container -->
+  <rect x="40" y="110" width="920" height="650" rx="14" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="1.4"/>
+  <text x="64" y="138" font-family="Consolas, Menlo, monospace" font-size="14" font-weight="700" fill="#334155">EventEnvelope</text>
+  <text x="180" y="138" font-family="Consolas, Menlo, monospace" font-size="13" fill="#94A3B8">{ JSON }</text>
+
+  <!-- ============ METADATA SECTION ============ -->
+  <g filter="url(#shadow)">
+    <rect x="70" y="160" width="400" height="550" rx="12" fill="#FFFFFF" stroke="#1D4ED8" stroke-width="1.6"/>
+  </g>
+  <path d="M70 172 a12 12 0 0 1 12 -12 h376 a12 12 0 0 1 12 12 v32 h-400 z" fill="#1E3A8A"/>
+  <text x="270" y="196" text-anchor="middle" font-size="16" font-weight="700" fill="#FFFFFF">metadata</text>
+
+  <!-- metadata rows -->
+  <!-- helper pattern: rect + key (monospace) + type label -->
+  <g font-family="Consolas, Menlo, monospace">
+    <rect x="86" y="212" width="368" height="36" rx="6" fill="#EFF6FF"/>
+    <circle cx="102" cy="230" r="3.5" fill="#1D4ED8"/>
+    <text x="114" y="235" font-size="14" fill="#1E3A8A">eventId</text>
+    <text x="440" y="235" text-anchor="end" font-size="11" font-style="italic" fill="#64748B">string (UUID)</text>
+
+    <rect x="86" y="256" width="368" height="36" rx="6" fill="#EFF6FF"/>
+    <circle cx="102" cy="274" r="3.5" fill="#1D4ED8"/>
+    <text x="114" y="279" font-size="14" fill="#1E3A8A">version</text>
+    <text x="440" y="279" text-anchor="end" font-size="11" font-style="italic" fill="#64748B">string</text>
+
+    <rect x="86" y="300" width="368" height="36" rx="6" fill="#EFF6FF"/>
+    <circle cx="102" cy="318" r="3.5" fill="#1D4ED8"/>
+    <text x="114" y="323" font-size="14" fill="#1E3A8A">eventType</text>
+    <text x="440" y="323" text-anchor="end" font-size="11" font-style="italic" fill="#64748B">string</text>
+
+    <rect x="86" y="344" width="368" height="36" rx="6" fill="#EFF6FF"/>
+    <circle cx="102" cy="362" r="3.5" fill="#1D4ED8"/>
+    <text x="114" y="367" font-size="14" fill="#1E3A8A">producer</text>
+    <text x="440" y="367" text-anchor="end" font-size="11" font-style="italic" fill="#64748B">string</text>
+
+    <rect x="86" y="388" width="368" height="36" rx="6" fill="#EFF6FF"/>
+    <circle cx="102" cy="406" r="3.5" fill="#1D4ED8"/>
+    <text x="114" y="411" font-size="14" fill="#1E3A8A">eventTime</text>
+    <text x="440" y="411" text-anchor="end" font-size="11" font-style="italic" fill="#64748B">datetime</text>
+
+    <rect x="86" y="432" width="368" height="36" rx="6" fill="#EFF6FF"/>
+    <circle cx="102" cy="450" r="3.5" fill="#1D4ED8"/>
+    <text x="114" y="455" font-size="14" fill="#1E3A8A">retryCount</text>
+    <text x="440" y="455" text-anchor="end" font-size="11" font-style="italic" fill="#64748B">number</text>
+
+    <rect x="86" y="476" width="368" height="36" rx="6" fill="#EFF6FF"/>
+    <circle cx="102" cy="494" r="3.5" fill="#1D4ED8"/>
+    <text x="114" y="499" font-size="14" fill="#1E3A8A">nextRetryAt</text>
+    <text x="440" y="499" text-anchor="end" font-size="11" font-style="italic" fill="#64748B">datetime | null</text>
+
+    <rect x="86" y="520" width="368" height="36" rx="6" fill="#EFF6FF"/>
+    <circle cx="102" cy="538" r="3.5" fill="#1D4ED8"/>
+    <text x="114" y="543" font-size="14" fill="#1E3A8A">traceId</text>
+    <text x="440" y="543" text-anchor="end" font-size="11" font-style="italic" fill="#64748B">string</text>
+
+    <rect x="86" y="564" width="368" height="36" rx="6" fill="#EFF6FF"/>
+    <circle cx="102" cy="582" r="3.5" fill="#1D4ED8"/>
+    <text x="114" y="587" font-size="14" fill="#1E3A8A">correlationId</text>
+    <text x="440" y="587" text-anchor="end" font-size="11" font-style="italic" fill="#64748B">string</text>
+
+    <rect x="86" y="608" width="368" height="36" rx="6" fill="#EFF6FF"/>
+    <circle cx="102" cy="626" r="3.5" fill="#1D4ED8"/>
+    <text x="114" y="631" font-size="14" fill="#1E3A8A">arrivedAt</text>
+    <text x="440" y="631" text-anchor="end" font-size="11" font-style="italic" fill="#64748B">datetime</text>
+
+    <rect x="86" y="652" width="368" height="36" rx="6" fill="#EFF6FF"/>
+    <circle cx="102" cy="670" r="3.5" fill="#1D4ED8"/>
+    <text x="114" y="675" font-size="14" fill="#1E3A8A">processedAt</text>
+    <text x="440" y="675" text-anchor="end" font-size="11" font-style="italic" fill="#64748B">datetime | null</text>
+  </g>
+
+  <!-- ============ PAYLOAD SECTION ============ -->
+  <g filter="url(#shadow)">
+    <rect x="510" y="160" width="400" height="240" rx="12" fill="#FFFFFF" stroke="#15803D" stroke-width="1.6"/>
+  </g>
+  <path d="M510 172 a12 12 0 0 1 12 -12 h376 a12 12 0 0 1 12 12 v32 h-400 z" fill="#166534"/>
+  <text x="710" y="196" text-anchor="middle" font-size="16" font-weight="700" fill="#FFFFFF">payload</text>
+
+  <g font-family="Consolas, Menlo, monospace">
+    <rect x="526" y="212" width="368" height="36" rx="6" fill="#F0FDF4"/>
+    <circle cx="542" cy="230" r="3.5" fill="#15803D"/>
+    <text x="554" y="235" font-size="14" fill="#166534">userId</text>
+    <text x="880" y="235" text-anchor="end" font-size="11" font-style="italic" fill="#64748B">string</text>
+
+    <rect x="526" y="256" width="368" height="36" rx="6" fill="#F0FDF4"/>
+    <circle cx="542" cy="274" r="3.5" fill="#15803D"/>
+    <text x="554" y="279" font-size="14" fill="#166534">pemId</text>
+    <text x="880" y="279" text-anchor="end" font-size="11" font-style="italic" fill="#64748B">string</text>
+
+    <rect x="526" y="300" width="368" height="36" rx="6" fill="#F0FDF4"/>
+    <circle cx="542" cy="318" r="3.5" fill="#15803D"/>
+    <text x="554" y="323" font-size="14" fill="#166534">source</text>
+    <text x="880" y="323" text-anchor="end" font-size="11" font-style="italic" fill="#64748B">string</text>
+
+    <rect x="526" y="344" width="368" height="36" rx="6" fill="#F0FDF4"/>
+    <circle cx="542" cy="362" r="3.5" fill="#15803D"/>
+    <text x="554" y="367" font-size="14" fill="#166534">validationStatus</text>
+    <text x="880" y="367" text-anchor="end" font-size="11" font-style="italic" fill="#64748B">enum</text>
+  </g>
+
+  <!-- Note under payload -->
+  <text x="710" y="428" text-anchor="middle" font-size="12" fill="#64748B" font-style="italic">payload varies by eventType; fields above apply to scan-validation events</text>
+
+</svg>

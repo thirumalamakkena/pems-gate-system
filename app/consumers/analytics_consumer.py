@@ -1,5 +1,6 @@
-from datetime import datetime
 import time  
+from app.metrics import metrics_buffer
+from app.metrics.metrics_flusher import MetricsFlusher
 
 from app.config.kafka import (
     analytics_consumer
@@ -9,13 +10,10 @@ from app.repositories.analytics_repository import (
     AnalyticsRepository
 )
 
-from app.repositories.metrics_repository import (
-    MetricsRepository
-)
-
 
 analytics_repository = AnalyticsRepository()
-metrics_repository = MetricsRepository()
+
+MetricsFlusher().start()
 
 print("Analytics Consumer Started...")
 print("Listening on validation-results...")
@@ -26,16 +24,9 @@ for message in analytics_consumer:
         start_time = time.time()
         event = message.value
 
-        print(f"Received: {event}")
+        metadata = event["metadata"]
+        payload = event["payload"]
 
-        event["scanTimestamp"] =  datetime.fromisoformat(
-            event["scanTimestamp"]
-        )
-
-        analytics_repository.update_hourly_metrics(
-            event
-        )
-        
         end_time = time.time()
 
         processing_time_ms = round(
@@ -43,21 +34,36 @@ for message in analytics_consumer:
             2
         )
 
-        metrics_repository.update_latency("analytics-consumer",processing_time_ms)
+
+        analytics_repository.update_hourly_metrics(
+            {**payload,
+             "processingTimeMs":processing_time_ms
+            }
+        )
+
+        analytics_consumer.commit()
         
-        metrics_repository.increment_processed(
-            "analytics-consumer"
+        metrics_buffer.increment(
+            "analytics-consumer",
+            "eventsProcessed"
+        )
+
+        metrics_buffer.add(
+            "analytics-consumer",
+            "totalProcessingLatencyMs",
+            processing_time_ms
         )
 
 
         print(
-            f"Analytics Updated: {event['eventId']}"
+            f"Analytics Updated: {metadata["eventId"]}"
         )
 
     except Exception as e:
 
-        metrics_repository.increment_failed(
-            "analytics-consumer"
+        metrics_buffer.increment(
+            "analytics-consumer",
+            "eventsFailed"
         )
 
         print(f"Analytics Error: {str(e)}")

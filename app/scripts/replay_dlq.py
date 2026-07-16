@@ -1,4 +1,3 @@
-import traceback
 from datetime import datetime
 
 from app.config.kafka import (
@@ -15,7 +14,7 @@ from app.repositories.dead_letter_repository import (
 dlq_repo = DeadLetterRepository()
 
 
-print("replying dlq events started.....")
+print("Replying dlq events started.....")
 
 unreplyed_events = dlq_repo.get_all_unreplayed()
 
@@ -39,12 +38,13 @@ for event in  unreplyed_events:
 
         producer.flush()
         
-        dlq_repo.mark_replayed(event["metadata"]["eventId"])
-        print("event sent to retry_validation_topic and marked as replayed...")
+        event_id = event["metadata"]["eventId"]
+        dlq_repo.mark_replayed(event_id)
+        print(f"event {event_id} : Sent to Retry validation topic and marked as replayed...")
 
     except Exception as e:
         print(
             f"Error processing event: {e}"
         )
-        traceback.print_exc()
+        
 

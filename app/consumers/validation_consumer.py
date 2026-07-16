@@ -1,6 +1,7 @@
 import time
-import traceback
-from pymongo.errors import DuplicateKeyError
+
+from app.metrics import metrics_buffer
+from app.metrics.metrics_flusher import MetricsFlusher
 from app.utils.current_time_stamp import (
     CurrentTimeStamp
 )
@@ -19,18 +20,15 @@ from app.services.validation_service import (
     ValidationService
 )
 
-from app.repositories.scan_repository import (
-    ScanRepository
-)
-
 from app.repositories.metrics_repository import (
     MetricsRepository
 )
 metrics_repository = MetricsRepository()
 
 validation_service = ValidationService()
-scan_repository = ScanRepository()
 current_time_stamp = CurrentTimeStamp()
+
+MetricsFlusher().start()
 
 print("Validation Consumer Started...")
 print("Listening on qr-scans topic...")
@@ -58,8 +56,11 @@ for message in validation_consumer:
         )
 
         validation_result = (
-            validation_service.validate(user_id,pem_id)
-        )
+            validation_service.validate(
+                    user_id,
+                    pem_id
+                )
+            )
 
         processed_at = current_time_stamp.current_time_iso()
         end_time = time.time()
@@ -69,30 +70,7 @@ for message in validation_consumer:
             2
         )
 
-        # result = {
-        #     "eventId": event["eventId"],
-        #     **payload,
-        #     "validationStatus": validation_result["status"],
-        #     "scanTimestamp": datetime.now(),
-        #     "processingTimeMs": processing_time_ms,
-        #     "createdAt": datetime.now(),
-        # }
-
-        # scan_repository.insert_scan(result)
-
-        # metrics_repository.increment_processed(
-        #     "validation-consumer"
-        # )
-
-
-        # metrics_repository.update_latency(
-        #     "validation-consumer",
-        #     processing_time_ms
-        # )
-
-
         kafka_topic_result = {
-            
             "metadata":{
                 **metadata,
                 "eventType": "VALIDATION_COMPLETED",
@@ -105,30 +83,35 @@ for message in validation_consumer:
                  **payload,
                  "validationStatus": validation_result["status"]
              }
-
         }
-        print(kafka_topic_result)
-    
 
         producer.send(
             VALIDATION_RESULTS_TOPIC,
             kafka_topic_result
         )
-        
 
         producer.flush()
-        validation_consumer.commit() 
 
-    # except DuplicateKeyError:
-    #     print(f"Duplicate Event: {event['eventId']}")
-    #     validation_consumer.commit()
+        validation_consumer.commit()
+
+        metrics_buffer.increment(
+            "validation-consumer",
+            "eventsProcessed"
+        )
+
+        metrics_buffer.add(
+            "validation-consumer",
+            "totalProcessingLatencyMs",
+            processing_time_ms
+        )
        
     except Exception as e:
-        # metrics_repository.increment_failed("validation-consumer")
-        print(
-            f"Error processing event: {e}"
+        
+        metrics_buffer.increment(
+            "validation-consumer",
+            "eventsFailed"
         )
-        traceback.print_exc()
+
         metadata["retryCount"] += 1
 
         metadata["eventType"] = "VALIDATION_RETRY"
@@ -140,6 +123,10 @@ for message in validation_consumer:
         )
 
         validation_consumer.commit()
+
+        print(
+            f"Error processing event: {e}"
+        )
 
 
         

@@ -1,98 +1,38 @@
-from datetime import datetime, timezone
+from app.utils.current_time_stamp import (
+    CurrentTimeStamp
+)
 
 from app.config.database import db
 
-
+time_stamp = CurrentTimeStamp()
 class MetricsRepository:
 
     def __init__(self):
         self.collection = db["metrics"]
-        self.events_processed = None
 
-    def increment_processed(self, service_name):
-
-        self.collection.update_one(
-            {"serviceName": service_name},
-            {
-                "$inc": {
-                    "eventsProcessed": 1
-                },
-                "$set": {
-                    "lastUpdated": datetime.now()
-                }
-            }
-        )
-
-        self.events_processed = self.collection.find_one({"serviceName": service_name})
-
-    def increment_failed(self, service_name):
+    def update_metrics(  
+            self,
+            service_name,
+            metrics
+        ):
 
         self.collection.update_one(
-            {"serviceName": service_name},
+            {"_id": service_name},
             {
-                "$inc": {
-                    "eventsFailed": 1
-                },
+                "$inc": metrics,
                 "$set": {
-                    "lastUpdated": datetime.now()
+                    "lastUpdated": time_stamp.current_time()
                 }
-            }
+            },
+            upsert=True
         )
 
-    def increment_cache_hit(self, service_name,cache_hits):
-
-        self.collection.update_one(
-            {"serviceName": service_name},
-            {
-                "$inc": {
-                    "cacheHits": cache_hits
-                },
-                "$set": {
-                    "lastUpdated": datetime.now()
-                }
-            }
-        )
-
-    def increment_cache_miss(self, service_name,cache_miss):
-
-        self.collection.update_one(
-            {"serviceName": service_name},
-            {
-                "$inc": {
-                    "cacheMisses": cache_miss
-                },
-                "$set": {
-                    "lastUpdated": datetime.now()
-                }
-            }
-        )
-
-    def update_latency(
-        self,
-        service_name,
-        latency_ms
-    ):
-
-        self.collection.update_one(
-            {"serviceName": service_name},
-            {
-                "$inc": {
-                    "totalProcessingLatencyMs": latency_ms
-                },
-                "$set": {
-                    "lastUpdated": datetime.now()
-                }
-            }
-        )
     
     def get_all_metrics(self):
 
         return list(
             self.collection.find(
-                {},
-                {
-                    "_id": 0
-                }
+                {}
             )
         )
 
@@ -105,8 +45,5 @@ class MetricsRepository:
         return self.collection.find_one(
             {
                 "_id": service_name
-            },
-            {
-                "_id": 0
             }
         )

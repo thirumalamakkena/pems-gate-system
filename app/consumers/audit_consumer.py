@@ -1,5 +1,6 @@
-from datetime import datetime, timezone
-
+from app.utils.current_time_stamp import CurrentTimeStamp
+from app.metrics import metrics_buffer
+from app.metrics.metrics_flusher import MetricsFlusher
 from app.config.kafka import (
     audit_consumer
 )
@@ -8,13 +9,12 @@ from app.repositories.audit_repository import (
     AuditRepository
 )
 
-from app.repositories.metrics_repository import (
-    MetricsRepository
-)
 
+time_stamp = CurrentTimeStamp()
 
 audit_repository = AuditRepository()
-metrics_repository = MetricsRepository()
+
+MetricsFlusher().start()
 
 print("Audit Consumer Started...")
 
@@ -24,28 +24,34 @@ for message in audit_consumer:
 
         event = message.value
 
-        event["scanTimestamp"] = datetime.fromisoformat(
-            event["scanTimestamp"]
-        )
+        metadata = event["metadata"]
+        payload = event["payload"]
 
-        event["recordedAt"] = datetime.now()
+
+        event["recordedAt"] = time_stamp.current_time()
 
         audit_repository.insert_event(
             event
         )
 
-        metrics_repository.increment_processed(
-            "audit-consumer"
+        audit_consumer.commit()
+
+        metrics_buffer.increment(
+            "audit-consumer",
+            "eventsProcessed"
         )
 
         print(
-            f"Audit Saved: {event['eventId']}"
+            f"Audit Saved: {metadata['eventId']}"
         )
 
     except Exception as e:
 
-        metrics_repository.increment_failed(
-            "audit-consumer"
+        metrics_buffer.increment(
+            "audit-consumer",
+            "eventsFailed"
         )
 
-        print(e)
+        print(
+            f"Audit Error: {str(e)}"
+        )
