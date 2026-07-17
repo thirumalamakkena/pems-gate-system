@@ -1,4 +1,5 @@
 import time  
+from datetime import datetime
 from app.metrics import metrics_buffer
 from app.metrics.metrics_flusher import MetricsFlusher
 
@@ -34,14 +35,19 @@ for message in analytics_consumer:
             2
         )
 
-
+        metadata["eventTime"] = datetime.fromisoformat(
+            metadata["eventTime"]
+        )
+        
         analytics_repository.update_hourly_metrics(
             {**payload,
-             "processingTimeMs":processing_time_ms
+             "processingTimeMs":processing_time_ms,
+             "eventTime": metadata["eventTime"]
             }
         )
 
         analytics_consumer.commit()
+
         
         metrics_buffer.increment(
             "analytics-consumer",
@@ -53,6 +59,7 @@ for message in analytics_consumer:
             "totalProcessingLatencyMs",
             processing_time_ms
         )
+
 
 
         print(
