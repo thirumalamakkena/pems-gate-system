@@ -1,5 +1,5 @@
 from dotenv import load_dotenv
-import os
+import os,json
 
 load_dotenv()
 
@@ -35,6 +35,6 @@ INITIAL_RETRY_DELAY = int(os.getenv(
     "INITIAL_RETRY_DELAY"
 ))
 
-ACTIVE_CONNECTIONS = (os.getenv(
+ACTIVE_CONNECTIONS = json.loads(os.getenv(
     "ACTIVE_CONNECTIONS"
 ))
