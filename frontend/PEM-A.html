@@ -1,259 +1,736 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <title>PEMS Gate Scanner</title>
-    <script src="https://unpkg.com/html5-qrcode"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PEMS-A · Gate Terminal</title>
+<script src="https://unpkg.com/html5-qrcode"></script>
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+<style>
 
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #f5f7fa;
-            margin: 0;
-            padding: 20px;
-        }
+    /* ============================================
+       TOKENS
+       ============================================ */
+    :root{
+        --bg:            #0B0F14;
+        --panel:         #121820;
+        --panel-raised:  #171F29;
+        --line:          #232E3A;
+        --line-soft:     #1A222C;
 
-        h1 {
-            color: #333;
-        }
+        --text:          #E6ECF2;
+        --text-dim:      #7C8AA0;
+        --text-faint:    #4B5768;
 
-        #connection {
-            margin-bottom: 15px;
-            font-weight: bold;
-        }
+        --accent:        #29D9C8;   /* signal cyan — reader LED */
+        --accent-dim:    #17453F;
 
-        .connected {
-            color: green;
-        }
+        --ok:            #33D17A;
+        --ok-bg:         #10231A;
+        --ok-line:       #1E4A32;
 
-        .disconnected {
-            color: red;
-        }
+        --deny:          #FF5D5D;
+        --deny-bg:       #2A1414;
+        --deny-line:     #4A2020;
 
-        #reader {
-            width: 500px;
-            max-width: 100%;
-            margin: auto;
-            border: 2px solid #ddd;
-            border-radius: 10px;
-            overflow: hidden;
-            background: white;
-        }
+        --pending:       #F2B84B;
+        --pending-bg:    #241D0F;
+        --pending-line:  #453515;
 
-        #status {
-            margin-top: 25px;
-            padding: 20px;
-            border-radius: 12px;
-            min-height: 100px;
-            font-size: 24px;
-            font-weight: bold;
-        }
+        --font-display:  'Barlow Condensed', 'Arial Narrow', sans-serif;
+        --font-body:     'Inter', -apple-system, sans-serif;
+        --font-mono:     'IBM Plex Mono', 'Courier New', monospace;
+    }
 
-        .valid {
-            background-color: #d4edda;
-            color: #155724;
-        }
+    *{ box-sizing: border-box; }
 
-        .invalid {
-            background-color: #f8d7da;
-            color: #721c24;
-        }
+    ::selection{ background: var(--accent-dim); color: var(--text); }
 
-        .pending {
-            background-color: #fff3cd;
-            color: #856404;
-        }
+    html, body{
+        height: 100%;
+    }
 
-        #lastScan {
-            margin-top: 15px;
-            font-size: 18px;
-            color: #444;
+    body{
+        margin: 0;
+        overflow: auto;
+        background:
+            radial-gradient(1200px 600px at 50% -10%, #0E1520 0%, var(--bg) 60%);
+        color: var(--text);
+        font-family: var(--font-body);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 16px;
+    }
+
+    .layout{
+        width: 100%;
+        max-width: 960px;
+        height: calc(100vh - 32px);
+        max-height: 780px;
+        display: grid;
+        grid-template-columns: minmax(0, 620px) minmax(240px, 300px);
+        grid-template-rows: 1fr;   /* <-- add this */
+        gap: 16px
+    }
+
+    @media (max-width: 880px){
+        .layout{
+            grid-template-columns: 1fr;
+            max-width: 480px;
+            height: calc(100vh - 32px);
         }
-    </style>
+        .log-panel{ display: none; } /* keeps the no-scroll promise on very small screens */
+    }
+
+    a{ color: inherit; }
+
+    /* focus visibility */
+    button:focus-visible{
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+    }
+
+    @media (prefers-reduced-motion: reduce){
+        *{ animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+    }
+
+    /* ============================================
+       HEADER BAR
+       ============================================ */
+    .term-shell{
+        width: 100%;
+        min-width: 0;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .topbar{
+        flex: 0 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 18px;
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 10px 10px 0 0;
+        border-bottom: none;
+    }
+
+    .gate-id{
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+    }
+
+    .gate-id .label{
+        font-family: var(--font-mono);
+        font-size: 10px;
+        letter-spacing: 0.14em;
+        color: var(--text-faint);
+        text-transform: uppercase;
+    }
+
+    .gate-id .value{
+        font-family: var(--font-display);
+        font-size: 28px;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        color: var(--text);
+        line-height: 1;
+    }
+
+    .topbar-right{
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+
+    #clock{
+        font-family: var(--font-mono);
+        font-size: 13px;
+        color: var(--text-dim);
+        letter-spacing: 0.02em;
+    }
+
+    .link-state{
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        font-family: var(--font-mono);
+        font-size: 11px;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        padding: 5px 10px;
+        border-radius: 20px;
+        border: 1px solid var(--line);
+    }
+
+    .dot{
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        flex-shrink: 0;
+    }
+
+    .link-state.on{ color: var(--ok); border-color: var(--ok-line); }
+    .link-state.on .dot{ background: var(--ok); box-shadow: 0 0 8px var(--ok); animation: pulse-ok 2s infinite; }
+
+    .link-state.off{ color: var(--deny); border-color: var(--deny-line); }
+    .link-state.off .dot{ background: var(--deny); }
+
+    @keyframes pulse-ok{
+        0%, 100%{ opacity: 1; }
+        50%{ opacity: 0.45; }
+    }
+
+    /* ============================================
+       SCANNER PANEL
+       ============================================ */
+    .scan-panel{
+        position: relative;
+        flex: 0 0 430px;
+        display: flex;
+        flex-direction: column;
+        background: #000;
+        border: 1px solid var(--line);
+        border-top: none;
+        overflow: hidden;
+    }
+
+    .scan-panel::before{
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: 5;
+        pointer-events: none;
+        box-shadow: inset 0 0 0 1px rgba(41,217,200,0.08);
+    }
+
+    .scan-hint{
+        flex: 0 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 8px 18px;
+        background: var(--panel-raised);
+        border-bottom: 1px solid var(--line-soft);
+    }
+
+    .scan-hint span{
+        font-family: var(--font-mono);
+        font-size: 10.5px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--text-faint);
+    }
+
+    #reader{
+        flex: 1 1 auto;
+        min-height: 0;
+        width: 100% !important;
+        background: #000;
+        overflow: hidden;
+        position: relative;
+        display: flex !important;
+        flex-direction: column;
+    }
+
+    /* html5-qrcode's video/canvas — fill the flexible area and crop to fit,
+       rather than dictating page height by their native aspect ratio */
+    #reader video,
+    #reader canvas{
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+    }
+
+    #reader__scan_region{
+        background: #000 !important;
+        flex: 1 1 auto;
+        min-height: 0;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* html5-qrcode injects its own controls; restyle them to match */
+    #reader img{ display: none !important; } /* hide default camera icon banner if present */
+
+    #reader select,
+    #reader button{
+        background: var(--panel-raised) !important;
+        color: var(--text) !important;
+        border: 1px solid var(--line) !important;
+        border-radius: 6px !important;
+        font-family: var(--font-body) !important;
+        font-size: 12px !important;
+        padding: 5px 10px !important;
+        cursor: pointer;
+    }
+
+    #reader__dashboard{
+        flex: 0 0 auto;
+        background: var(--panel) !important;
+        border-top: 1px solid var(--line-soft) !important;
+        padding: 6px 10px !important;
+    }
+
+    #reader__dashboard_section_csr span{
+        font-size: 12px !important;
+    }
+
+    /* ============================================
+       RESULT PANEL — badge / ticket style
+       ============================================ */
+    .result-panel{
+        flex: 0 0 auto;
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-top: none;
+        border-radius: 0 0 10px 10px;
+        padding: 16px 20px;
+        transition: background 0.25s ease, border-color 0.25s ease;
+    }
+
+    .result-panel.state-pending{ background: var(--pending-bg); }
+    .result-panel.state-valid  { background: var(--ok-bg); }
+    .result-panel.state-invalid{ background: var(--deny-bg); }
+
+    .result-head{
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 2px;
+    }
+
+    .result-icon{
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        font-size: 15px;
+        border: 1px solid var(--line);
+        background: var(--panel-raised);
+        color: var(--text-dim);
+    }
+
+    .state-valid .result-icon{ border-color: var(--ok-line); color: var(--ok); background: rgba(51,209,122,0.08); }
+    .state-invalid .result-icon{ border-color: var(--deny-line); color: var(--deny); background: rgba(255,93,93,0.08); }
+    .state-pending .result-icon{ border-color: var(--pending-line); color: var(--pending); background: rgba(242,184,75,0.08); }
+
+    .result-status{
+        font-family: var(--font-display);
+        font-size: 22px;
+        font-weight: 600;
+        letter-spacing: 0.01em;
+        color: var(--text);
+    }
+
+    .state-valid .result-status{ color: var(--ok); }
+    .state-invalid .result-status{ color: var(--deny); }
+    .state-pending .result-status{ color: var(--pending); }
+
+    .result-meta{
+        margin-top: 8px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px 20px;
+        font-family: var(--font-mono);
+    }
+
+    .meta-item .k{
+        font-size: 9.5px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--text-faint);
+        display: block;
+        margin-bottom: 3px;
+    }
+
+    .meta-item .v{
+        font-size: 15px;
+        color: var(--text);
+        word-break: break-all;
+    }
+
+    /* ============================================
+       EVENT LOG
+       ============================================ */
+    .log-panel{
+        width: 100%;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .log-panel .log-inner{
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+    }
+
+    .log-head{
+        flex: 0 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 4px 8px;
+    }
+
+    .log-head span{
+        font-family: var(--font-mono);
+        font-size: 10.5px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--text-faint);
+    }
+
+    #log{
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: var(--panel);
+        flex: 1 1 auto;
+        height: 500px;        
+        overflow-y: auto;
+    }
+
+    #log::-webkit-scrollbar{ width: 8px; }
+    #log::-webkit-scrollbar-track{ background: transparent; }
+    #log::-webkit-scrollbar-thumb{ background: var(--line); border-radius: 8px; }
+    #log::-webkit-scrollbar-thumb:hover{ background: var(--text-faint); }
+
+    #log li{
+        padding: 10px 14px;
+        font-family: var(--font-mono);
+        font-size: 12.5px;
+        border-bottom: 1px solid var(--line-soft);
+    }
+
+    #log li:last-child{ border-bottom: none; }
+
+    #log li .row1{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 3px;
+    }
+
+    #log li .t{ color: var(--text-faint); }
+    #log li .u{ color: var(--text); word-break: break-all; }
+    #log li .s{ font-size: 10.5px; letter-spacing: 0.06em; text-transform: uppercase; flex-shrink: 0; margin-left: 8px; }
+    #log li .s.g{ color: var(--ok); }
+    #log li .s.d{ color: var(--deny); }
+
+    #log .empty{
+        padding: 22px 16px;
+        color: var(--text-faint);
+        text-align: center;
+        font-style: normal;
+    }
+
+    /* footer note */
+    .foot-note{
+        flex: 0 0 auto;
+        margin-top: 10px;
+        font-family: var(--font-mono);
+        font-size: 10px;
+        color: var(--text-faint);
+        text-align: center;
+        letter-spacing: 0.04em;
+    }
+
+</style>
 </head>
 
 <body>
 
-    <h1>PEMS-A Gate Scanner</h1>
+<div class="layout">
 
-    <div id="connection" class="disconnected">
-        🔴 Disconnected
+    <div class="term-shell">
+
+        <div class="topbar">
+            <div class="gate-id">
+                <span class="label">Gate Terminal</span>
+                <span class="value">PEMS&#8209;A</span>
+            </div>
+            <div class="topbar-right">
+                <span id="clock">--:--:--</span>
+                <div id="connection" class="link-state off">
+                    <span class="dot"></span>
+                    <span id="connText">Offline</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="scan-panel">
+            <div class="scan-hint">
+                <span id="scanHintText">Position badge inside frame</span>
+                <span id="cooldownNote">Fast scan mode</span>
+            </div>
+            <div id="reader"></div>
+        </div>
+
+        <div class="result-panel state-pending" id="resultPanel">
+            <div class="result-head">
+                <div class="result-icon" id="resultIcon">&#9679;</div>
+                <div class="result-status" id="resultStatus">Awaiting Scan</div>
+            </div>
+            <div class="result-meta">
+                <div class="meta-item">
+                    <span class="k">User</span>
+                    <span class="v" id="metaUser">&mdash;</span>
+                </div>
+                <div class="meta-item">
+                    <span class="k">Time</span>
+                    <span class="v" id="metaTime">&mdash;</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="foot-note">PEMS &middot; Personnel Entry Management System &middot; Terminal build local</div>
+
     </div>
 
-    <div id="reader"></div>
-
-    <div id="status" class="pending">
-        Waiting for Scan...
+    <div class="log-panel">
+        <div class="log-inner">
+            <div class="log-head">
+                <span>Recent Activity</span>
+                <span id="logCount">0 events</span>
+            </div>
+            <ul id="log">
+                <li class="empty">No scans recorded this session</li>
+            </ul>
+        </div>
     </div>
 
-    <div id="lastScan">
-        No scans yet
-    </div>
+</div>
 
-    <script>
+<script>
 
-        // ==================================
-        // Configuration
-        // ==================================
+    // ==================================
+    // Configuration
+    // ==================================
 
-        const PEM_ID = "PEMS-A";
-        const SCAN_COOLDOWN = 5000;
+    const PEM_ID = "PEMS-A";
+    const RESUME_DELAY = 3000;
+    // NOTE: no duplicate-scan cooldown map here — the scanner is paused
+    // the instant a code is read (see pauseScanning below) and only
+    // resumes once a validation result comes back over the WebSocket,
+    // so a second scan physically cannot happen until then.
 
-        // ==================================
-        // Duplicate Scan Protection
-        // ==================================
+    // ==================================
+    // Clock
+    // ==================================
 
-        const recentScans = new Map();
-        // ==================================
-        // WebSocket
-        // ==================================
+    function tickClock(){
+        const now = new Date();
+        document.getElementById("clock").textContent =
+            now.toLocaleTimeString([], { hour12: false });
+    }
+    tickClock();
+    setInterval(tickClock, 1000);
 
-        const ws = new WebSocket(
-            `ws://localhost:8000/ws/${PEM_ID}`
+    // ==================================
+    // Event log (UI-only addition)
+    // ==================================
+
+    const logList = document.getElementById("log");
+    const logCount = document.getElementById("logCount");
+    let eventTotal = 0;
+
+    function pushLog(userId, granted){
+        eventTotal++;
+        logCount.textContent = eventTotal + (eventTotal === 1 ? " event" : " events");
+
+        const empty = logList.querySelector(".empty");
+        if (empty) empty.remove();
+
+        const li = document.createElement("li");
+        const time = new Date().toLocaleTimeString([], { hour12: false });
+
+        li.innerHTML = `
+            <div class="row1">
+                <span class="t">${time}</span>
+                <span class="s ${granted ? 'g' : 'd'}">${granted ? 'Granted' : 'Denied'}</span>
+            </div>
+            <span class="u">${userId}</span>
+        `;
+
+        logList.prepend(li);
+
+        while (logList.children.length > 50){
+            logList.removeChild(logList.lastChild);
+        }
+    }
+
+    // ==================================
+    // WebSocket
+    // ==================================
+
+    const ws = new WebSocket(
+        `ws://localhost:8000/ws/${PEM_ID}`
+    );
+
+    const connectionEl = document.getElementById("connection");
+    const connText = document.getElementById("connText");
+
+    ws.onopen = () => {
+
+        console.log("Connected to Gateway");
+
+        connectionEl.className = "link-state on";
+        connText.textContent = "Connected";
+    };
+
+    ws.onclose = () => {
+
+        console.log("Disconnected");
+
+        connectionEl.className = "link-state off";
+        connText.textContent = "Offline";
+
+        if (awaitingResult) {
+            resumeScanning();
+        }
+    };
+
+    ws.onerror = (error) => {
+        console.error(error);
+    };
+
+    ws.onmessage = (event) => {
+
+        const result = JSON.parse(event.data);
+
+        console.log(
+            "Validation Result:",
+            result
         );
 
-        ws.onopen = () => {
+        const panel   = document.getElementById("resultPanel");
+        const icon    = document.getElementById("resultIcon");
+        const status  = document.getElementById("resultStatus");
+        const metaUser = document.getElementById("metaUser");
+        const metaTime = document.getElementById("metaTime");
 
-            console.log("Connected to Gateway");
+        const granted = result.validationStatus === "VALID";
 
-            document.getElementById("connection")
-                .innerHTML = "🟢 Connected";
+        panel.className = "result-panel " + (granted ? "state-valid" : "state-invalid");
+        icon.innerHTML = granted ? "&#10003;" : "&#10005;";
+        status.textContent = granted ? "Access Granted" : (result.validationStatus || "Access Denied");
 
-            document.getElementById("connection")
-                .className = "connected";
-        };
+        metaUser.textContent = result.userId || "\u2014";
+        metaTime.textContent = new Date().toLocaleTimeString([], { hour12: false });
 
-        ws.onclose = () => {
+        pushLog(result.userId || "Unknown", granted);
 
-            console.log("Disconnected");
+        resumeScanning();
+    };
 
-            document.getElementById("connection")
-                .innerHTML = "🔴 Disconnected";
+    // ==================================
+    // QR Scan Handler
+    // ==================================
 
-            document.getElementById("connection")
-                .className = "disconnected";
-        };
+    const scanHintText = document.getElementById("scanHintText");
+    let awaitingResult = false;
 
-        ws.onerror = (error) => {
-            console.error(error);
-        };
+    function pauseScanning() {
+        awaitingResult = true;
+        try {
+            scanner.pause(true); // true = keep last frame visible instead of a black screen
+        } catch (e) {
+            console.warn("Scanner pause failed:", e);
+        }
+        scanHintText.textContent = "Validating\u2026 scanner paused";
+    }
 
-        ws.onmessage = (event) => {
+    function resumeScanning() {
+        scanHintText.textContent = "Result shown — resuming in " + (RESUME_DELAY / 1000) + "s";
 
-            const result = JSON.parse(event.data);
-
-            console.log(
-                "Validation Result:",
-                result
-            );
-
-            const statusDiv =
-                document.getElementById("status");
-
-            if (result.validationStatus === "VALID") {
-
-                statusDiv.className = "valid";
-
-                statusDiv.innerHTML = `
-                    🟢 ACCESS GRANTED
-                    <br><br>
-                    User: ${result.userId}
-                `;
-
-            } else {
-
-                statusDiv.className = "invalid";
-
-                statusDiv.innerHTML = `
-                    🔴 ${result.validationStatus}
-                    <br><br>
-                    User: ${result.userId}
-                `;
+        setTimeout(() => {
+            awaitingResult = false;
+            try {
+                scanner.resume();
+            } catch (e) {
+                console.warn("Scanner resume failed:", e);
             }
-        };
+            scanHintText.textContent = "Position badge inside frame";
+        }, RESUME_DELAY);
+    }
 
-        // ==================================
-        // QR Scan Handler
-        // ==================================
+    function onScanSuccess(decodedText) {
 
-        function onScanSuccess(decodedText) {
-
-            const now = Date.now();
-
-            if (
-                recentScans.has(decodedText) &&
-                now - recentScans.get(decodedText)
-                < SCAN_COOLDOWN
-            ) {
-
-                console.log(
-                    `Duplicate ignored: ${decodedText}`
-                );
-
-                return;
-            }
-
-            recentScans.set(
-                decodedText,
-                now
-            );
-
-            console.log(
-                "Scanned:",
-                decodedText
-            );
-
-            document.getElementById("lastScan")
-                .innerHTML =
-                `Last Scan: ${decodedText}`;
-
-            document.getElementById("status")
-                .className = "pending";
-
-            document.getElementById("status")
-                .innerHTML =
-                "⏳ Validating...";
-
-            ws.send(
-                JSON.stringify({
-                    userId: decodedText,
-                    eventTime:  new Date().toISOString(),
-                    source: "QR_SCANNER"
-                })
-            );
+        if (awaitingResult) {
+            // A result is still in flight; ignore any frames scanned
+            // while paused (defensive — pause() should prevent this anyway).
+            return;
         }
 
-        function onScanFailure(error) {
-            // Ignore scan failures
-        }
-
-        // ==================================
-        // Start Scanner
-        // ==================================
-
-        const scanner =
-            new Html5QrcodeScanner(
-                "reader",
-                {
-                    fps: 10,
-                    qrbox: 250
-                },
-                false
-            );
-
-        scanner.render(
-            onScanSuccess,
-            onScanFailure
+        console.log(
+            "Scanned:",
+            decodedText
         );
 
-    </script>
+        pauseScanning();
+
+        const panel   = document.getElementById("resultPanel");
+        const icon    = document.getElementById("resultIcon");
+        const status  = document.getElementById("resultStatus");
+        const metaUser = document.getElementById("metaUser");
+        const metaTime = document.getElementById("metaTime");
+
+        panel.className = "result-panel state-pending";
+        icon.innerHTML = "&#9679;";
+        status.textContent = "Validating\u2026";
+        metaUser.textContent = decodedText;
+        metaTime.textContent = new Date().toLocaleTimeString([], { hour12: false });
+
+        ws.send(
+            JSON.stringify({
+                userId: decodedText,
+                eventTime:  new Date().toISOString(),
+                source: "QR_SCANNER"
+            })
+        );
+    }
+
+    function onScanFailure(error) {
+        // Ignore scan failures
+    }
+
+    // ==================================
+    // Start Scanner
+    // ==================================
+
+    const scanner =
+        new Html5QrcodeScanner(
+            "reader",
+            {
+                fps: 30,
+                qrbox: { width: 240, height: 240 },
+                aspectRatio: 1.0,
+                disableFlip: true,       // skip the mirrored-frame decode pass — faster reads
+                rememberLastUsedCamera: true
+            },
+            false
+        );
+
+    scanner.render(
+        onScanSuccess,
+        onScanFailure
+    );
+
+</script>
 
 </body>
-
 </html>

@@ -1,13 +1,16 @@
 # PEMS Analytics & Monitoring Platform
 
-> A production-inspired event-driven access control platform built with **FastAPI**, **Apache Kafka**, and **MongoDB Atlas**.
+> A production-inspired event-driven access control platform built with **FastAPI**, **Apache Kafka**, **MongoDB Atlas**, **Redis**, **Prometheus**, and **Grafana**.
 
 ![Python](https://img.shields.io/badge/Python-3.12-blue?logo=python)
 ![FastAPI](https://img.shields.io/badge/FastAPI-009688?logo=fastapi)
 ![Apache Kafka](https://img.shields.io/badge/Apache-Kafka-black?logo=apachekafka)
 ![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-green?logo=mongodb)
+![Redis](https://img.shields.io/badge/Redis-Cache-red?logo=redis)
+![Prometheus](https://img.shields.io/badge/Prometheus-Metrics-orange?logo=prometheus)
+![Grafana](https://img.shields.io/badge/Grafana-Dashboards-orange?logo=grafana)
 ![Docker](https://img.shields.io/badge/Docker-Compose-blue?logo=docker)
-![Version](https://img.shields.io/badge/Version-V3-success)
+![Version](https://img.shields.io/badge/Version-V4-success)
 
 ---
 
@@ -16,6 +19,8 @@
 PEMS Analytics & Monitoring Platform is a real-time event-driven backend system that validates employee QR code scans at multiple PEMS gateways.
 
 Instead of tightly coupling business logic into a single service, every QR scan is published as an event to Apache Kafka, allowing multiple independent consumers to process the same event simultaneously.
+
+Version 4 adds a full observability layer on top of the reliability and caching work done in V3 — every consumer and the gateway now expose Prometheus metrics, and Grafana dashboards give a live view of throughput, cache performance, retries, and Kafka consumer health.
 
 The project demonstrates how modern distributed systems handle scalability, reliability, and observability using asynchronous event processing.
 
@@ -63,10 +68,11 @@ The project demonstrates how modern distributed systems handle scalability, reli
 - Improved validation latency
 - Cache hit/miss monitoring
 
-### Monitoring
+### Observability (New in V4)
 
-- Runtime service metrics
-- Cache hit/miss tracking
+- Prometheus instrumentation across all consumers and the gateway
+- Grafana dashboards for application and Kafka health
+- Consumer lag monitoring
 - Batched metrics aggregation
 - Service health monitoring
 
@@ -80,9 +86,12 @@ The project demonstrates how modern distributed systems handle scalability, reli
 | QR Scanner | html5-qrcode |
 | Backend | FastAPI |
 | Language | Python |
-| Streaming | Apache Kafka |
+| Streaming | Apache Kafka (KRaft mode) |
 | Database | MongoDB Atlas |
+| Cache | Redis |
 | Communication | WebSocket |
+| Metrics | Prometheus |
+| Dashboards | Grafana |
 | Containerization | Docker Compose |
 
 ---
@@ -92,6 +101,8 @@ The project demonstrates how modern distributed systems handle scalability, reli
 > **Architecture Diagram**
 
 ![System Architecture](docs/images/system_architecture.svg)
+
+*(Updated in V4 to include Redis cache-aside reads and Prometheus scraping every consumer.)*
 
 ---
 
@@ -110,22 +121,86 @@ PEMS-ANALYTICS-PLATFORM
 │
 ├── app
 │   ├── api
+│   │   ├── routes
+│   │   └── main.py
+│   │
 │   ├── config
+│   │   ├── database.py
+│   │   ├── kafka.py
+│   │   ├── redis.py
+│   │   └── settings.py
+│   │
 │   ├── consumers
+│   │   ├── validation_consumer.py
+│   │   ├── analytics_consumer.py
+│   │   ├── audit_consumer.py
+│   │   ├── retry_consumer.py
+│   │   └── dlq_consumer.py
+│   │
 │   ├── metrics
+│   │   ├── metrics_buffer.py
+│   │   └── metrics_flusher.py
+│   │
+│   ├── models
+│   │   └── event_envelope.py
+│   │
+│   ├── observability
+│   │   ├── prometheus.yml
+│   │   └── prometheus_metrics.py
+│   │
 │   ├── repositories
+│   │   ├── __init__.py
+│   │   ├── analytics_repository.py
+│   │   ├── audit_repository.py
+│   │   ├── dead_letter_repository.py
+│   │   ├── gateway_repository.py
+│   │   ├── metrics_repository.py
+│   │   └── user_repository.py
+│   │
+│   ├── scripts
+│   │   └── replay_dlq.py
+│   │
 │   ├── services
+│   │   ├── cache_service.py
+│   │   └── validation_service.py
+│   │
+│   ├── simulator
+│   │   └── traffic_simulator.py
+│   │
 │   ├── utils
+│   │   ├── current_time_stamp.py
+│   │   ├── event_builder.py
+│   │   └── event_id_generator.py
+│   │
 │   └── data
+│       ├── pems_gateways.json
+│       └── users.json
 │
-├── frontend
-├── tests
 ├── docs
 │   └── images
+│       ├── system_architecture.svg
+│       ├── event_lifecycle.svg
+│       ├── event_envelope.svg
+│       ├── kafka_topics.svg
+│       ├── retry_dlq.svg
+│       ├── cache_flow.svg
+│       ├── metrics_pipeline.svg
+│       ├── observability_architecture.svg
+│       └── screenshots/
 │
+├── frontend
+│   ├── assets
+│   ├── PEM-A.html
+│   └── PEM-B.html
+│
+├── qrcodes
+│
+├── .env
+├── .gitignore
 ├── docker-compose.yml
+├── README.md
 ├── requirements.txt
-└── README.md
+└── test.py
 ```
 
 ---
@@ -136,14 +211,15 @@ The platform follows an **event-driven architecture** where each QR scan is publ
 
 Each consumer has a single responsibility:
 
-- **Validation Consumer** validates employee access.
+- **Validation Consumer** validates employee access, checking Redis before falling back to MongoDB.
 - **Analytics Consumer** computes hourly statistics.
 - **Audit Consumer** stores immutable event history.
 - **Retry Consumer** retries failed validations.
 - **DLQ Consumer** stores permanently failed events.
 
-This design allows each component to evolve independently while improving scalability and fault tolerance.
+Every consumer also exposes Prometheus metrics, scraped continuously and visualized in Grafana, so the whole pipeline is observable end-to-end rather than just log-visible.
 
+This design allows each component to evolve independently while improving scalability, fault tolerance, and observability.
 
 ---
 
@@ -233,7 +309,7 @@ The platform uses multiple Kafka topics to decouple services and support reliabl
 |------------|---------|
 | `users` | Employee master data |
 | `pems_gateways` | Gateway configuration |
-| `scan_history` | Immutable audit history |
+| `audit_logs` | Immutable audit trail |
 | `analytics_hourly` | Hourly aggregated analytics |
 | `metrics` | Runtime service metrics |
 | `dead_letter_events` | Permanently failed events |
@@ -281,13 +357,28 @@ Benefits:
 
 ---
 
+# Distributed Caching
+
+Redis sits in front of MongoDB as a shared cache across all consumer instances, cutting validation latency and database read load.
+
+> **Cache Flow**
+
+![Cache Flow](docs/images/redis_cache_architecture.svg)
+
+### Benefits
+
+- Faster validation lookups
+- Reduced MongoDB read load
+- Shared cache across horizontally scaled consumers
+- Cache hit/miss visibility via Prometheus
+
+---
+
 # Metrics Optimization
 
-Version 3 introduces buffered metrics aggregation.
+Version 3 introduced buffered metrics aggregation; Version 4 builds on it with Prometheus instrumentation.
 
-Instead of updating MongoDB for every processed event, each consumer stores metrics in memory.
-
-A background flusher periodically writes aggregated metrics to MongoDB.
+Instead of updating MongoDB for every processed event, each consumer stores metrics in memory. A background flusher periodically writes aggregated metrics to MongoDB, while the same metrics are simultaneously exposed live via Prometheus.
 
 > **Metrics Pipeline**
 
@@ -299,7 +390,54 @@ A background flusher periodically writes aggregated metrics to MongoDB.
 - Lower MongoDB load
 - Higher throughput
 - Better scalability
-- Improved overall performance
+- Live, queryable metrics in addition to persisted history
+
+---
+
+# Observability
+
+Version 4 adds a full monitoring layer: every consumer and the gateway expose a `/metrics` endpoint scraped by Prometheus, and Grafana visualizes that data as live dashboards.
+
+> **Observability Architecture**
+
+![Observability Architecture](docs/images/observability_architecture.svg)
+
+## Prometheus Metrics
+
+| Metric | Type | Description |
+|--------|------|-------------|
+| `events_processed_total` | Counter | Total events processed |
+| `events_failed_total` | Counter | Total events that failed processing |
+| `cache_hits_total` | Counter | Redis cache hits |
+| `cache_misses_total` | Counter | Redis cache misses |
+| `retry_events_total` | Counter | Events sent to the retry topic |
+| `dlq_events_total` | Counter | Events sent to the dead letter topic |
+| `validation_results_total` | Counter | VALID / INVALID validation outcomes |
+| `kafka_messages_consumed_total` | Counter | Messages consumed per topic/consumer |
+| `kafka_messages_produced_total` | Counter | Messages produced per topic/producer |
+| `event_processing_latency_ms` | Histogram | End-to-end event processing latency |
+| `active_consumers` | Gauge | Number of currently active consumer instances |
+
+## Grafana Dashboards
+
+
+**Dashboard 1 — System Overview**
+
+![Grafana System Overview](docs/images/screenshots/grafana_system_overview.png)
+
+**Dashboard 2 — Validation Consumer**
+
+![Grafana Validation Consumer](docs/images/screenshots/grafana_validation_consumer.png)
+
+**Dashboard 3 — Reliability (Retry / DLQ)**
+
+![Grafana Reliability](docs/images/screenshots/grafana_reliability.png)
+
+**Dashboard 4 — Kafka & Consumer Health**
+
+![Grafana Kafka Health](docs/images/screenshots/grafana_kafka_health.png)
+
+**Dashboard 5 — Infrastructure Monitoring** *(planned)*
 
 ---
 
@@ -317,8 +455,8 @@ A background flusher periodically writes aggregated metrics to MongoDB.
 
 | Method | Endpoint | Description |
 |---------|----------|-------------|
-| GET | `/metrics` | Get metrics for all services |
-| GET | `/metrics/{service}` | Get metrics for a specific service |
+| GET | `/metrics` | Prometheus scrape endpoint |
+| GET | `/metrics/{service}` | Get buffered metrics for a specific service |
 
 ---
 
@@ -328,7 +466,6 @@ A background flusher periodically writes aggregated metrics to MongoDB.
 |---------|----------|-------------|
 | GET | `/analytics/hourly` | Hourly analytics |
 | GET | `/analytics/gateway/{pemId}` | Gateway-wise analytics |
-
 
 ---
 
@@ -341,6 +478,7 @@ Before running the project, ensure the following are installed:
 - Python 3.12+
 - Apache Kafka (KRaft Mode)
 - MongoDB Atlas
+- Redis
 - Docker Desktop
 - Git
 
@@ -406,13 +544,13 @@ BOOTSTRAP_SERVERS=localhost:9092
 
 # Running the Platform
 
-## 1. Start Kafka
+## 1. Start Kafka, Redis, Prometheus & Grafana
 
 ```bash
 docker compose up -d
 ```
 
-Verify Kafka and Redis is running.
+Verify Kafka, Redis, Prometheus, and Grafana are all running.
 
 ---
 
@@ -472,6 +610,15 @@ http://localhost:5500/PEM-A.html
 
 ---
 
+## 5. Access Observability
+
+```
+Prometheus:  http://localhost:9090
+Grafana:     http://localhost:3000
+```
+
+---
+
 # Load Testing
 
 The project includes an event simulator for generating high-volume QR scan events.
@@ -498,7 +645,7 @@ Consumers
 
 ↓
 
-MongoDB
+MongoDB / Redis
 ```
 
 Recommended test scenarios:
@@ -510,11 +657,18 @@ Recommended test scenarios:
 | High Load | 100+ events/sec |
 | Burst Load | Short-duration spikes |
 
+Tracked during load tests (visible live in Grafana):
+
+- Kafka throughput (produced / consumed per second)
+- Redis cache hit vs. miss ratio under load
+- End-to-end event processing latency
+- Retry and DLQ volume under induced failure
+
 ---
 
 # Performance Optimizations
 
-Version 3 introduces several improvements over previous versions.
+Version 4 builds on the reliability and caching foundation from V3 with full observability.
 
 ### Event Envelope
 
@@ -530,6 +684,14 @@ Version 3 introduces several improvements over previous versions.
 - Retry delay
 - Configurable retry attempts
 - Dead Letter Queue support
+
+---
+
+### Redis Cache
+
+- Cache-aside pattern in front of MongoDB
+- Shared across horizontally scaled consumers
+- Cache hit/miss ratio tracked as a Prometheus metric
 
 ---
 
@@ -553,98 +715,23 @@ Metrics Flusher (Every 5 Seconds)
 MongoDB
 ```
 
+At the same time, Prometheus scrapes each service's live in-memory counters directly — no flush delay for dashboards.
+
 Benefits:
 
 - Reduced MongoDB writes
 - Lower latency
 - Improved throughput
+- Live observability without extra database load
 
 ---
 
-# Project Structure
+# Screenshots
 
-```text
-```text
-PEMS-ANALYTICS-PLATFORM
-│
-├── app
-│   │
-│   ├── api
-│   │   ├── routes
-│   │   ├── __init__.py
-│   │   └── main.py
-│   │
-│   ├── config
-│   │   ├── __init__.py
-│   │   ├── database.py
-│   │   ├── kafka.py
-│   │   ├── redis.py
-│   │   └── settings.py
-│   │
-│   ├── consumers
-│   │   ├── __init__.py
-│   │   ├── validation_consumer.py
-│   │   ├── analytics_consumer.py
-│   │   ├── audit_consumer.py
-│   │   ├── retry_consumer.py
-│   │   └── dlq_consumer.py
-│   │
-│   ├── metrics
-│   │   ├── __init__.py
-│   │   ├── metrics_buffer.py
-│   │   └── metrics_flusher.py
-│   │
-│   ├── models
-│   │   └── event_envelope.py
-│   │
-│   ├── repositories
-│   │   ├── __init__.py
-│   │   ├── analytics_repository.py
-│   │   ├── audit_repository.py
-│   │   ├── dead_letter_repository.py
-│   │   ├── gateway_repository.py
-│   │   ├── metrics_repository.py
-│   │   └── user_repository.py
-│   │
-│   ├── scripts
-│   │   └── replay_dlq.py
-│   │
-│   ├── services
-│   │   ├── __init__.py
-│   │   ├── cache_service.py
-│   │   └── validation_service.py
-│   │
-│   ├── simulator
-│   │   └── traffic_simulator.py
-│   │
-│   ├── utils
-│   │   ├── current_time_stamp.py
-│   │   ├── event_builder.py
-│   │   └── event_id.py
-│   │
-│   └── data
-│       ├── pems_gateways.json
-│       └── users.json
-│
-├── docs
-│   └── images
-│       ├── event_flow.svg
-│       └── pems_architecture.svg
-│
-├── frontend
-│   ├── assets
-│   ├── PEM-A.html
-│   └── PEM-B.html
-│
-├── qrcodes
-│
-├── .env
-├── .gitignore
-├── docker-compose.yml
-├── README.md
-├── requirements.txt
-└── test.py
-```
+
+**Frontend Gate Scanner**
+
+![Frontend](docs/images/screenshots/frontend.png)
 
 ---
 
@@ -659,8 +746,9 @@ The repository includes the following architecture diagrams.
 | `event_envelope.svg` | Standard event structure |
 | `kafka_topics.svg` | Kafka topic relationships |
 | `retry_dlq.svg` | Retry and DLQ workflow |
+| `cache_flow.svg` | Redis cache-aside read/write flow |
 | `metrics_pipeline.svg` | Buffered metrics aggregation |
-
+| `observability_architecture.svg` | Prometheus scraping & Grafana dashboard flow |
 
 ---
 
@@ -721,28 +809,26 @@ The project has been developed incrementally to simulate how a production-grade 
 
 ---
 
-## 🚧 Planned Improvements
-
-### Version 4 — Observability
+## ✅ Version 4 — Observability
 
 - Prometheus Integration
 - Grafana Dashboards
 - Consumer Lag Monitoring
 - Kafka Metrics
-- Custom Alerts
-- End-to-End Tracing
+- Custom Alerts *(in progress)*
+- End-to-End Tracing *(in progress)*
 
 ---
 
+## 🚧 Planned Improvements
+
 ### Version 5 — Production Readiness
 
-- Redis Distributed Cache
-- JWT Authentication
-- Role-Based Access Control (RBAC)
-- Kubernetes Deployment
+- Full Dockerization of the application
+- Kubernetes deployment
 - CI/CD Pipeline
-- Multi-Campus Support
-- High Availability Deployment
+- Authentication (OAuth2 / JWT)
+- Role-Based Access Control
 
 ---
 
@@ -794,6 +880,15 @@ This project demonstrates practical implementation of modern backend engineering
 
 ---
 
+## Observability & Monitoring
+
+- Prometheus instrumentation
+- Grafana dashboard design
+- Consumer lag tracking
+- Metric types: Counters, Histograms, Gauges
+
+---
+
 ## Software Engineering
 
 - Modular Architecture
@@ -811,7 +906,8 @@ Some ideas for extending the platform include:
 
 - Apache Spark Streaming
 - Elasticsearch
-- Prometheus & Grafana
+- OpenTelemetry end-to-end tracing
+- Alertmanager integration
 - Kubernetes
 - CI/CD Pipeline
 - OAuth2 / JWT Authentication
@@ -861,7 +957,9 @@ Backend & Data Engineering Enthusiast
 - Python
 - Apache Kafka
 - MongoDB
+- Redis
 - FastAPI
+- Prometheus & Grafana
 - Distributed Systems
 - System Design
 
@@ -888,19 +986,22 @@ Special focus areas include:
 - Event-Driven Architecture
 - Apache Kafka
 - MongoDB Atlas
+- Redis
 - FastAPI
 - Reliability Patterns
 - Performance Optimization
+- Observability & Monitoring
 - System Design
 
 ---
 
 # Architecture Assets
 
-The README references the following diagrams located in:
+The README references the following diagrams and screenshots located in:
 
 ```text
 docs/images/
+docs/images/screenshots/
 ```
 
 | File | Description |
@@ -910,7 +1011,12 @@ docs/images/
 | event_envelope.svg | Event metadata and payload structure |
 | kafka_topics.svg | Kafka topics and consumers |
 | retry_dlq.svg | Retry and Dead Letter Queue workflow |
+| cache_flow.svg | Redis cache-aside flow |
 | metrics_pipeline.svg | Buffered metrics aggregation |
+| observability_architecture.svg | Prometheus & Grafana monitoring flow |
+| screenshots/frontend.png | Gate scanner frontend |
+| screenshots/prometheus.png | Prometheus targets view |
+| screenshots/grafana_*.png | Grafana dashboards |
 
 ---
 
@@ -931,11 +1037,12 @@ See the `LICENSE` file for more information.
 | Framework | FastAPI |
 | Streaming | Apache Kafka |
 | Database | MongoDB Atlas |
+| Cache | Redis |
 | Communication | WebSocket |
 | Reliability | Retry, DLQ, Replay |
-| Monitoring | Metrics Buffer & Batch Flusher |
+| Monitoring | Prometheus, Grafana, Metrics Buffer & Batch Flusher |
 | Scalability | Multi-Consumer Kafka Architecture |
-| Version | V3 |
+| Version | V4 |
 
 ---
 

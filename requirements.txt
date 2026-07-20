@@ -5,3 +5,5 @@ kafka-python
 python-dotenv
 pydantic 
 redis
+prometheus-client
+websockets  

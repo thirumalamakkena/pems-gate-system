@@ -1,0 +1,1 @@
+from app.observability.prometheus_metrics import prometheus_metrics

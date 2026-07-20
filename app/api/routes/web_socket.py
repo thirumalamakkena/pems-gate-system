@@ -12,7 +12,7 @@ from app.config.settings import (
     QR_SCAN_TOPIC
 )
 
-from app.utils.event_id import (
+from app.utils.event_id_generator import (
     generate_event_id
 )
 

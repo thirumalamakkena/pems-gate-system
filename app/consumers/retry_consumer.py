@@ -1,6 +1,8 @@
-import time
+import time,atexit
 from datetime import datetime
 from app.metrics import metrics_buffer
+from prometheus_client import start_http_server
+from app.observability import prometheus_metrics
 from app.metrics.metrics_flusher import MetricsFlusher
 from app.utils.current_time_stamp import (
     CurrentTimeStamp
@@ -22,6 +24,8 @@ from app.services.validation_service import (
     ValidationService
 )
 
+SERVICE_NAME = "retry-consumer"
+
 MetricsFlusher().start()
 validation_service = ValidationService()
 
@@ -30,6 +34,17 @@ current_time_stamp = CurrentTimeStamp()
 print("Retry Consumer Started...")
 print("Listening on retry topic...")
 
+start_http_server(8003)
+
+prometheus_metrics.consumer_started(
+    SERVICE_NAME
+)
+
+atexit.register(
+    lambda: prometheus_metrics.consumer_stopped(
+        SERVICE_NAME
+    )
+)
 
 for message in retry_consumer:
 
@@ -38,6 +53,11 @@ for message in retry_consumer:
         
         start_time = time.time()
         event = message.value
+
+        prometheus_metrics.record_kafka_consumed(
+            service=SERVICE_NAME,
+            topic=RETRY_VALIDATION_TOPIC
+        )
 
         metadata = event["metadata"]
         payload = event["payload"]
@@ -50,6 +70,12 @@ for message in retry_consumer:
             f"Offset={message.offset} "
             f"Event={metadata['eventId']}"
         )
+        
+        if user_id == "USR095":
+            raise Exception("Stimulated exception")
+        
+        if user_id == "USR010"  and int(metadata["retryCount"])  < 1:
+            raise Exception("Stimulated exception")
 
         
         if metadata["nextRetryAt"] != None:
@@ -69,6 +95,10 @@ for message in retry_consumer:
             )
         )
 
+        prometheus_metrics.record_retry_success(
+            SERVICE_NAME
+        )
+
         processed_at = current_time_stamp.current_time_iso()
         end_time = time.time()
 
@@ -82,7 +112,7 @@ for message in retry_consumer:
             "metadata":{
                 **metadata,
                 "eventType": "VALIDATION_COMPLETED",
-                "producer": "retry-consumer",
+                "producer": SERVICE_NAME,
                 "arrivedAt": arrived_at,
                 "processedAt": processed_at
             }
@@ -101,24 +131,79 @@ for message in retry_consumer:
         
         producer.flush()
 
+        prometheus_metrics.record_kafka_produced(
+            service=SERVICE_NAME,
+            topic=VALIDATION_RESULTS_TOPIC
+        )
+
         retry_consumer.commit() 
 
+        cache_hits = validation_service.get_cache_hits()
+
+        user_cache_hits = cache_hits.get("user")
+        gateway_cache_hits = cache_hits.get("gateway")
+
+        if user_cache_hits.get("userCacheHit") :
+            metrics_buffer.increment(
+                SERVICE_NAME,
+                "userCacheHit"
+            )
+
+            prometheus_metrics.record_cache_hit(
+                SERVICE_NAME
+            )
+        else:
+            metrics_buffer.increment(
+                SERVICE_NAME,
+                "userCacheMiss"
+            )
+
+            prometheus_metrics.record_cache_miss(
+                SERVICE_NAME
+            )
+
+
+        if gateway_cache_hits.get("gatewayCacheHit") :
+            metrics_buffer.increment(
+                SERVICE_NAME,
+                "gatewayCacheHit"
+            )
+        else:
+            metrics_buffer.increment(
+                SERVICE_NAME,
+                "gatewayCacheMiss"
+            )
+
+
         metrics_buffer.increment(
-            "retry-consumer",
+            SERVICE_NAME,
             "eventsProcessed"
         )
 
+        prometheus_metrics.record_processed_event(
+            SERVICE_NAME
+        )
+
         metrics_buffer.add(
-            "retry-consumer",
+            SERVICE_NAME,
             "totalProcessingLatencyMs",
+            processing_time_ms
+        )
+
+        prometheus_metrics.record_processing_latency(
+            SERVICE_NAME,
             processing_time_ms
         )
 
     except Exception as e:
 
         metrics_buffer.increment(
-            "retry-consumer",
+            SERVICE_NAME,
             "eventsFailed"
+        )
+
+        prometheus_metrics.record_failed_event(
+            SERVICE_NAME
         )
 
         retry_count = int(metadata["retryCount"])
@@ -126,13 +211,20 @@ for message in retry_consumer:
 
             metadata["eventType"] = "VALIDATION_RETRY"
 
-            metadata["producer"] = "retry-consumer"
+            metadata["producer"] = SERVICE_NAME
             metadata["retryCount"] += 1
             metadata["nextRetryAt"] = current_time_stamp.next_retry_time()
 
             producer.send(
                 RETRY_VALIDATION_TOPIC,
                 event
+            )
+
+            producer.flush()
+
+            prometheus_metrics.record_kafka_produced(
+                service=SERVICE_NAME,
+                topic=RETRY_VALIDATION_TOPIC
             )
 
         else:
@@ -148,6 +240,17 @@ for message in retry_consumer:
             producer.send(
                 DEAD_LETTER_TOPIC,
                 event
+            )
+
+            producer.flush()
+
+            prometheus_metrics.record_dlq_event(
+                SERVICE_NAME
+            )
+
+            prometheus_metrics.record_kafka_produced(
+                service=SERVICE_NAME,
+                topic=DEAD_LETTER_TOPIC
             )
 
         retry_consumer.commit()

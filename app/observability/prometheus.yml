@@ -1,0 +1,34 @@
+global:
+  scrape_interval: 5s
+
+scrape_configs:
+
+  - job_name: "validation-consumer"
+
+    static_configs:
+      - targets:
+          - host.docker.internal:8001
+
+  - job_name: "analytics-consumer"
+
+    static_configs:
+      - targets:
+          - host.docker.internal:8002
+
+  - job_name: "retry-consumer"
+
+    static_configs:
+      - targets:
+          - host.docker.internal:8003
+
+  - job_name: "dlq-consumer"
+
+    static_configs:
+      - targets:
+          - host.docker.internal:8004
+
+  - job_name: "audit-consumer"
+
+    static_configs:
+      - targets:
+          - host.docker.internal:8005

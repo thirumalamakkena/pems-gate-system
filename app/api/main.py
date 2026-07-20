@@ -52,6 +52,8 @@ def consume_validation_results():
 
                 print(f"Sent Result -> {pem_id}")
 
+                validation_results_consumer.commit()
+
             except Exception as e:
 
                 print(f"Push Error: {e}")
