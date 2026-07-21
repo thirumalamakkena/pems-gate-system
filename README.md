@@ -1,6 +1,6 @@
 # PEMS Analytics & Monitoring Platform
 
-> A production-inspired event-driven access control platform built with **FastAPI**, **Apache Kafka**, **MongoDB Atlas**, **Redis**, **Prometheus**, and **Grafana**.
+> A production-inspired event-driven access control platform built with **FastAPI**, **Apache Kafka**, **MongoDB Atlas**, **Redis**, **Prometheus**, and **Grafana** — fully containerized with Docker.
 
 ![Python](https://img.shields.io/badge/Python-3.12-blue?logo=python)
 ![FastAPI](https://img.shields.io/badge/FastAPI-009688?logo=fastapi)
@@ -10,7 +10,7 @@
 ![Prometheus](https://img.shields.io/badge/Prometheus-Metrics-orange?logo=prometheus)
 ![Grafana](https://img.shields.io/badge/Grafana-Dashboards-orange?logo=grafana)
 ![Docker](https://img.shields.io/badge/Docker-Compose-blue?logo=docker)
-![Version](https://img.shields.io/badge/Version-V4-success)
+![Version](https://img.shields.io/badge/Version-V5-success)
 
 ---
 
@@ -20,9 +20,11 @@ PEMS Analytics & Monitoring Platform is a real-time event-driven backend system 
 
 Instead of tightly coupling business logic into a single service, every QR scan is published as an event to Apache Kafka, allowing multiple independent consumers to process the same event simultaneously.
 
-Version 4 adds a full observability layer on top of the reliability and caching work done in V3 — every consumer and the gateway now expose Prometheus metrics, and Grafana dashboards give a live view of throughput, cache performance, retries, and Kafka consumer health.
+Version 4 added a full observability layer — every consumer and the gateway expose Prometheus metrics, and Grafana dashboards give a live view of throughput, cache performance, retries, and Kafka consumer health.
 
-The project demonstrates how modern distributed systems handle scalability, reliability, and observability using asynchronous event processing.
+**Version 5 fully containerizes the platform.** The gateway, all 5 consumers, and the frontend now run as Docker containers alongside Kafka, Redis, Prometheus, and Grafana — built from a single shared image with per-service commands. 
+
+The project demonstrates how modern distributed systems handle scalability, reliability, observability, and containerized deployment using asynchronous event processing.
 
 ---
 
@@ -68,13 +70,18 @@ The project demonstrates how modern distributed systems handle scalability, reli
 - Improved validation latency
 - Cache hit/miss monitoring
 
-### Observability (New in V4)
+### Observability
 
 - Prometheus instrumentation across all consumers and the gateway
 - Grafana dashboards for application and Kafka health
 - Consumer lag monitoring
 - Batched metrics aggregation
 - Service health monitoring
+
+### Containerization (New in V5)
+
+- Full platform runs via Docker Compose — gateway, all 5 consumers, and frontend included
+- One shared image for the gateway + all consumers, different command per service
 
 ---
 
@@ -101,8 +108,6 @@ The project demonstrates how modern distributed systems handle scalability, reli
 > **Architecture Diagram**
 
 ![System Architecture](docs/images/system_architecture.svg)
-
-*(Updated in V4 to include Redis cache-aside reads and Prometheus scraping every consumer.)*
 
 ---
 
@@ -183,7 +188,7 @@ PEMS-ANALYTICS-PLATFORM
 │       ├── event_envelope.svg
 │       ├── kafka_topics.svg
 │       ├── retry_dlq.svg
-│       ├── cache_flow.svg
+│       ├── redis_cache_architecture.svg
 │       ├── metrics_pipeline.svg
 │       ├── observability_architecture.svg
 │       └── screenshots/
@@ -197,6 +202,7 @@ PEMS-ANALYTICS-PLATFORM
 │
 ├── .env
 ├── .gitignore
+├── Dockerfile
 ├── docker-compose.yml
 ├── README.md
 ├── requirements.txt
@@ -219,7 +225,7 @@ Each consumer has a single responsibility:
 
 Every consumer also exposes Prometheus metrics, scraped continuously and visualized in Grafana, so the whole pipeline is observable end-to-end rather than just log-visible.
 
-This design allows each component to evolve independently while improving scalability, fault tolerance, and observability.
+As of V5, the gateway and all 5 consumers run as Docker containers built from a single shared image, each started with its own command — keeping deployment simple while each service still evolves independently in code.
 
 ---
 
@@ -363,7 +369,7 @@ Redis sits in front of MongoDB as a shared cache across all consumer instances, 
 
 > **Cache Flow**
 
-![Cache Flow](docs/images/redis_cache_architecture.svg)
+![Redis Cache Architecture](docs/images/redis_cache_architecture.svg)
 
 ### Benefits
 
@@ -376,7 +382,7 @@ Redis sits in front of MongoDB as a shared cache across all consumer instances, 
 
 # Metrics Optimization
 
-Version 3 introduced buffered metrics aggregation; Version 4 builds on it with Prometheus instrumentation.
+Version 3 introduced buffered metrics aggregation; Version 4 built on it with Prometheus instrumentation.
 
 Instead of updating MongoDB for every processed event, each consumer stores metrics in memory. A background flusher periodically writes aggregated metrics to MongoDB, while the same metrics are simultaneously exposed live via Prometheus.
 
@@ -396,7 +402,7 @@ Instead of updating MongoDB for every processed event, each consumer stores metr
 
 # Observability
 
-Version 4 adds a full monitoring layer: every consumer and the gateway expose a `/metrics` endpoint scraped by Prometheus, and Grafana visualizes that data as live dashboards.
+Every consumer and the gateway expose a `/metrics` endpoint scraped by Prometheus, and Grafana visualizes that data as live dashboards.
 
 > **Observability Architecture**
 
@@ -419,7 +425,6 @@ Version 4 adds a full monitoring layer: every consumer and the gateway expose a 
 | `active_consumers` | Gauge | Number of currently active consumer instances |
 
 ## Grafana Dashboards
-
 
 **Dashboard 1 — System Overview**
 
@@ -473,14 +478,11 @@ Version 4 adds a full monitoring layer: every consumer and the gateway expose a 
 
 ## Prerequisites
 
-Before running the project, ensure the following are installed:
-
-- Python 3.12+
-- Apache Kafka (KRaft Mode)
-- MongoDB Atlas
-- Redis
 - Docker Desktop
 - Git
+- A MongoDB Atlas connection string (or your own MongoDB instance)
+
+Python 3.12+ is only needed if you want to run a service outside Docker for local debugging — not required for the standard Docker workflow below.
 
 ---
 
@@ -494,129 +496,155 @@ git clone https://github.com/thirumalamakkena/pems-gate-system/
 cd pems-gate-system
 ```
 
----
-
-## Create a Virtual Environment
-
-### Windows
-
-```bash
-python -m venv .venv
-
-.venv\Scripts\activate
-```
-
-### Linux / macOS
-
-```bash
-python3 -m venv .venv
-
-source .venv/bin/activate
-```
-
----
-
-## Install Dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
----
-
 ## Configure Environment
 
-Update your application configuration with:
+open `.env` and confirm these match your setup:
 
-- MongoDB Atlas Connection String
-- Kafka Bootstrap Server
-- Kafka Topic Names
+```dotenv
+MONGODB_URI="<your-mongodb-atlas-uri>"
+DATABASE_NAME="pems"
 
-Example:
+KAFKA_BOOTSTRAP_SERVERS="kafka:29092"
 
-```python
-MONGO_URI=<your-mongodb-uri>
+QR_SCAN_TOPIC="qr-scans"
+VALIDATION_RESULTS_TOPIC="validation-results"
+RETRY_VALIDATION_TOPIC="retry-validation"
+DEAD_LETTER_TOPIC="dead-letter-events"
 
-BOOTSTRAP_SERVERS=localhost:9092
+MAX_RETRY_ATTEMPTS=3
+INITIAL_RETRY_DELAY=5
+
+REDIS_HOST="redis"
+REDIS_PORT=6379
 ```
 
 ---
 
-# Running the Platform
+# Running the Platform (Docker)
 
-## 1. Start Kafka, Redis, Prometheus & Grafana
+## 1. Build Docker Images
+
+Build all project images.
+
+```bash
+docker compose build
+```
+
+---
+
+## 2. Start All Services
+
+Start all containers.
 
 ```bash
 docker compose up -d
 ```
 
-Verify Kafka, Redis, Prometheus, and Grafana are all running.
+run in detached mode (recommended).
 
----
-
-## 2. Start the FastAPI Gateway
-
+or
 ```bash
-uvicorn app.api.main:app --reload
+docker compose up 
 ```
 
 ---
 
-## 3. Start Consumers
+## 3. Verify Running Containers
 
-### Validation Consumer
-
-```bash
-python -m app.consumers.validation_consumer
-```
-
-### Analytics Consumer
+Check that all services are running.
 
 ```bash
-python -m app.consumers.analytics_consumer
-```
-
-### Audit Consumer
-
-```bash
-python -m app.consumers.audit_consumer
-```
-
-### Retry Consumer
-
-```bash
-python -m app.consumers.retry_consumer
-```
-
-### DLQ Consumer
-
-```bash
-python -m app.consumers.dlq_consumer
+docker compose ps
 ```
 
 ---
 
-## 4. Start the Frontend
+## 4. View Logs
+
+View logs from all services.
 
 ```bash
-python -m http.server 5500 -d frontend
+docker compose logs -f
 ```
 
-Open your browser:
+View logs for a specific service.
 
+```bash
+docker compose logs -f validation-consumer
 ```
-http://localhost:5500/PEM-A.html
+
+Example:
+
+```bash
+docker compose logs -f gateway
+docker compose logs -f analytics-consumer
+docker compose logs -f retry-consumer
 ```
 
 ---
 
-## 5. Access Observability
+> **Only use this step if restart need else skip**
+## 5. Restart Services
 
-```
-Prometheus:  http://localhost:9090
-Grafana:     http://localhost:3000
+Restart all services.
+
+```bash
+docker compose restart
 ```
 
+Restart a specific service.
+
+```bash
+docker compose restart validation-consumer
+```
+
+---
+
+## 6. Access the Application
+
+| Service | URL |
+|----------|-----|
+| Gateway API | http://localhost:8000 |
+| Frontend | http://localhost:5500/PEM-A.html |
+| Prometheus | http://localhost:9090 |
+| Grafana | http://localhost:3000 |
+
+---
+> Start testing from frontend using sample QR codes provided **qrcodes** file
+
+---
+
+## 7. Stop All Services
+
+Stop all running containers.
+
+```bash
+docker compose down
+```
+
+Stop and remove associated volumes.
+
+> **Warning:** This removes persistent Docker volumes.
+
+```bash
+docker compose down -v
+```
+
+---
+
+## 8. Rebuild After Code Changes
+
+If Dockerfiles or dependencies change, rebuild the images.
+
+```bash
+docker compose up --build
+```
+
+Or rebuild in detached mode.
+
+```bash
+docker compose up --build -d
+```
 ---
 
 # Load Testing
@@ -666,9 +694,51 @@ Tracked during load tests (visible live in Grafana):
 
 ---
 
-# Performance Optimizations
+## 🚦 Running the Traffic Simulator
 
-Version 4 builds on the reliability and caching foundation from V3 with full observability.
+> **Important**
+>
+> The traffic simulator is executed **outside Docker** (from your local machine).  
+> Before running it, update the Kafka bootstrap server in your `.env` file.
+
+### 1. Update `.env`
+
+Change:
+
+```env
+KAFKA_BOOTSTRAP_SERVERS=kafka:29092
+```
+
+to:
+
+```env
+KAFKA_BOOTSTRAP_SERVERS=localhost:9092
+```
+
+This allows the simulator running on your host machine to connect to the Kafka broker exposed by Docker.
+
+---
+
+### 2. Run the Traffic Simulator
+
+```bash
+python -m app.simulator.traffic_simulator
+```
+
+---
+
+### 3. Restore `.env`
+
+After completing the simulation, if you plan to run the application entirely inside Docker again, change the bootstrap server back to:
+
+```env
+KAFKA_BOOTSTRAP_SERVERS=kafka:29092
+```
+
+> **Note:** All Dockerized application services communicate with Kafka using the internal Docker network (`kafka:29092`), while applications running on the host machine must use `localhost:9092`.
+
+---
+# Performance Optimizations
 
 ### Event Envelope
 
@@ -726,8 +796,14 @@ Benefits:
 
 ---
 
-# Screenshots
+### Containerization (New in V5)
 
+- Single shared Docker image for the gateway and all 5 consumers
+- Container-aware Redis/Kafka configuration (no hardcoded `localhost`)
+
+---
+
+# Screenshots
 
 **Frontend Gate Scanner**
 
@@ -746,7 +822,7 @@ The repository includes the following architecture diagrams.
 | `event_envelope.svg` | Standard event structure |
 | `kafka_topics.svg` | Kafka topic relationships |
 | `retry_dlq.svg` | Retry and DLQ workflow |
-| `cache_flow.svg` | Redis cache-aside read/write flow |
+| `redis_cache_architecture.svg` | Redis cache-aside read/write flow |
 | `metrics_pipeline.svg` | Buffered metrics aggregation |
 | `observability_architecture.svg` | Prometheus scraping & Grafana dashboard flow |
 
@@ -820,11 +896,14 @@ The project has been developed incrementally to simulate how a production-grade 
 
 ---
 
-## 🚧 Planned Improvements
+## 🚧 Version 5 — Full Dockerization *(in progress)*
 
-### Version 5 — Production Readiness
+- Shared Docker image for gateway + all 5 consumers
+- Container-aware Redis/Kafka configuration
+- Kafka health check to gate application startup
 
-- Full Dockerization of the application
+### Planned for later in V5
+
 - Kubernetes deployment
 - CI/CD Pipeline
 - Authentication (OAuth2 / JWT)
@@ -886,6 +965,13 @@ This project demonstrates practical implementation of modern backend engineering
 - Grafana dashboard design
 - Consumer lag tracking
 - Metric types: Counters, Histograms, Gauges
+
+---
+
+## Containerization & Deployment
+
+- Docker & Docker Compose
+- Health checks and startup ordering
 
 ---
 
@@ -960,6 +1046,7 @@ Backend & Data Engineering Enthusiast
 - Redis
 - FastAPI
 - Prometheus & Grafana
+- Docker
 - Distributed Systems
 - System Design
 
@@ -991,6 +1078,7 @@ Special focus areas include:
 - Reliability Patterns
 - Performance Optimization
 - Observability & Monitoring
+- Containerization & Deployment
 - System Design
 
 ---
@@ -1011,11 +1099,10 @@ docs/images/screenshots/
 | event_envelope.svg | Event metadata and payload structure |
 | kafka_topics.svg | Kafka topics and consumers |
 | retry_dlq.svg | Retry and Dead Letter Queue workflow |
-| cache_flow.svg | Redis cache-aside flow |
+| redis_cache_architecture.svg | Redis cache-aside flow |
 | metrics_pipeline.svg | Buffered metrics aggregation |
 | observability_architecture.svg | Prometheus & Grafana monitoring flow |
 | screenshots/frontend.png | Gate scanner frontend |
-| screenshots/prometheus.png | Prometheus targets view |
 | screenshots/grafana_*.png | Grafana dashboards |
 
 ---
@@ -1041,8 +1128,9 @@ See the `LICENSE` file for more information.
 | Communication | WebSocket |
 | Reliability | Retry, DLQ, Replay |
 | Monitoring | Prometheus, Grafana, Metrics Buffer & Batch Flusher |
+| Deployment | Docker Compose |
 | Scalability | Multi-Consumer Kafka Architecture |
-| Version | V4 |
+| Version | V5 |
 
 ---
 

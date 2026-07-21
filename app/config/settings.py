@@ -38,3 +38,6 @@ INITIAL_RETRY_DELAY = int(os.getenv(
 ACTIVE_CONNECTIONS = json.loads(os.getenv(
     "ACTIVE_CONNECTIONS"
 ))
+
+REDIS_HOST = os.getenv("REDIS_HOST", "redis")
+REDIS_PORT = int(os.getenv("REDIS_PORT", 6379))
